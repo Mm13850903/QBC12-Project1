@@ -155,7 +155,6 @@ while True:
 
                             lines_list.remove(temp)
                             print("line Ba Mofaghiat Remove Shod")
-
                             break
 
                     elif x == "4":
