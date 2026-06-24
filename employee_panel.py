@@ -34,7 +34,7 @@ def login_employee(employees_list):
                 return None
 
 def add_line(lines_list):
-    print("--- Add New Line (Type 'exit' to cancel)---")
+    print("--- Add New Line (Type 'exit' to cancel) ---")
 
     name = input("Enter Line Name: ").strip()
     if name.lower() == "exit": return
@@ -67,6 +67,88 @@ def add_line(lines_list):
 
     print(f"Line '{name}' created successfully with {station_count} stations!")
 
+def edit_line(lines_list):
+    print("--- Edit Line (Type 'exit' to cancel) ---")
+
+    selected_line = None
+
+    while True:
+        target_name = input("Enter the Line Name you want to edit (or 'exit' to back): ").strip()
+
+        if target_name.lower() == "exit" :
+            return
+        
+        for line in lines_list:
+            if line.name == target_name:
+                selected_line = line
+                break
+
+        if selected_line:
+            selected_line.show_info()
+            break
+        else:
+            print(f"Error: Line '{target_name}' not found. Please try again.")
+    
+    print("1. Edit Name")
+    print("2. Edit Source")
+    print("3. Edit Destination")
+    print("4. Edit Station_count")
+    print("5. Edit Stations")
+    print("6. Back")
+
+    choice = input("What do you want to update?")
+
+    match choice:
+        case "1":
+            new_name = input("Enter new name: ").strip()
+            if new_name.lower() == "exit": return
+
+            name_exists = False
+            for l in lines_list:
+                if l.name == new_name:
+                    name_exists = True
+                    break
+            
+            if name_exists:
+                print(f"Error: {new_name} is already taken!")
+            else:
+                selected_line.name = new_name
+                print("Name Updated!")
+
+        case "2":
+            new_source = input("Enter new source: ").strip()
+            if new_source.lower() == "exit": return
+            selected_line.source = new_source
+            print("Source Updated!")
+
+        case "3":
+            new_destination = input("Enter new destination: ").strip()
+            if new_destination.lower() == "exit": return
+            selected_line.destination = new_destination
+            print("Destination Updated!")
+
+        case "4" | "5":
+            print("Updating stations information...")
+            count_input = input("Enter new number of stations: ").strip()
+            if count_input.isdigit():
+                selected_line.station_count = int(count_input)
+                
+                new_stations_list = []
+                for i in range(selected_line.station_count):
+                    s_name = input(f"Station {i+1} Name: ").strip()
+                    new_stations_list.append(s_name)
+                
+                selected_line.stations_names = new_stations_list
+                print("Stations Updated!")
+            else:
+                print("Invalid number!")
+
+        case "6":
+            return
+
+
+            
+
 
 def display_employee_panel(current_employee):
     while True:
@@ -85,78 +167,10 @@ def display_employee_panel(current_employee):
 
         match choice:
             case "1":
-                  add_line(lines_list)
-
+                add_line(lines_list)
 
             case "2":
-
-                            while True:
-                                nema = input("Kodam Khat baray update mikhay")
-                                if name.lower() == 'back':
-                                    break
-
-                                temp = None
-                                for line in lines_list:
-                                    if line.name == name:
-                                        temp = line
-                                        break
-
-                                if temp is None:
-                                    print("Error: In khat mojood nist!")
-                                    print("try again")
-                                    continue
-
-                                print(f"Khat yaft shod! :)) ---> Name: {temp.name} || Mabda: {temp.source} || Maghsad: {temp.destination} || Tedad Istgah-ha: {temp.station_count}")
-                                print("1. Edit Name Khat")
-                                print("2. Edit Mabda")
-                                print("3. Edit Maghsad")
-                                print("4. Edit Tedad Va Name Istgah-Ha")
-
-                                temp1 = input("Enter yout choice: ")
-
-                                if temp1 =="1":
-                                    new_name = input("Name Jadide Khat : ")
-                                    duplicate = False
-                                    for line in lines_list:
-                                        if line.name == new_name and line != temp:
-                                            duplicate = True
-                                            break
-                                    if duplicate:
-                                        print("Error: Name Jadide Khat Tekrari Hast Va Baraye Khati Diger Sabt Shodeh ast!")
-
-
-                                    else:
-                                        for train in trains_list:
-                                            if train.line_name == temp.name:
-                                                train.line_name = new_name
-                                        temp.name = new_name
-                                        print("Name Khat Ba Mofaghiat Update Shod")
-
-                                elif temp1 =="2":
-                                    temp.source = input("Mabda jadid: ")
-                                    print("Mabda Ba Mofaghiat Update Shod")
-
-                                elif temp1 == "3":
-                                    temp.destination = input("Maghsad jadid: ")
-                                    print("Maghsad Ba Mofaghiat Update Shod.")
-
-                                elif temp1 == "4":
-                                    new_count = input("Tedad Istgah hay Jadid: ")
-                                    if new_count.isdigit():
-                                        new_count = int(new_count)
-                                        temp.station_count = new_count
-
-                                    new_stations = []
-                                    for i in range(new_count):
-                                        station_name = input(f"Name Istgah {i + 1}: ")
-                                        new_stations.append(station_name)
-                                    temp.stations = new_stations
-
-                                    print("Tedad Va List Istgah-ha Ba Mofaghiat Update Shod.")
-                                else:
-
-                                    print("Error: Tedad istgah bayad int bashad!")
-                                break
+                edit_line(lines_list)
 
             case "3":
                             while True:

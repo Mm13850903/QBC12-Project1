@@ -16,3 +16,8 @@ class Line:
         return self.station_count
     def get_stations(self):
         return self.stations
+    
+    def show_info(self):
+        print(f"Line: {self.name}")
+        print(f"Route: {self.source} to {self.destination}")
+        print(f"Stations ({self.station_count}): {" -> ".join(self.stations)}")
