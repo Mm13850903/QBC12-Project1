@@ -1,5 +1,6 @@
-from Employee import Employee,Train,Line
-
+from Employee import Employee
+import Line
+import Train
 
 
 employees_list = [Employee("karmand1", "Kd@1", "reza", "sam@email.com")]
@@ -10,7 +11,6 @@ trains_list = []
 while True:
 
     n = input("Koja Beram?")
-
     if n == "2":
         print("Kaemand Ghatar Khosh oomadi!")
         login = False
@@ -64,7 +64,7 @@ while True:
                                 station_name = input(f"Name istgah {i+1}")
                                 stations.append(station_name)
 
-                            new_line = Line(name, source, destination, station_count, stations)
+                            new_line = Line.Line(name, source, destination, station_count, stations)
                             lines_list.append(new_line)
                             print("Khat ba mofaghaghiat ezafe shod.")
                             break
@@ -86,7 +86,7 @@ while True:
                                 print("try again")
                                 continue
 
-                            print(f"Khat yaft shod! :)) -> Name: {temp.name} || Mabda: {temp.source} || Maghsad: {temp.destination} || Tedad Istgah-ha: {temp.station_count}")
+                            print(f"Khat yaft shod! :)) ---> Name: {temp.name} || Mabda: {temp.source} || Maghsad: {temp.destination} || Tedad Istgah-ha: {temp.station_count}")
                             print("1. Edit Name Khat")
                             print("2. Edit Mabda")
                             print("3. Edit Maghsad")
@@ -155,6 +155,7 @@ while True:
 
                             lines_list.remove(temp)
                             print("line Ba Mofaghiat Remove Shod")
+
                             break
 
                     elif x == "4":
@@ -213,7 +214,7 @@ while True:
                             if capacity.isdigit():
                                 capacity = int(capacity)
 
-                            new_train = Train(train_id, name, speed, stop_time, quality, price, capacity)
+                            new_train = Train.Train(train_id, name, speed, stop_time, quality, price, capacity)
                             trains_list.append(new_train)
                             print("Ghatar ba Mofaghiat ezafeh Shod :))")
                             break
@@ -245,7 +246,7 @@ while True:
                             print("8. Edit Zarfiat")
                             print(24 * "-")
 
-                            ch = input("Enter your choice : ")
+                            ch = input("Enter your choice (1-8): ")
 
                             if ch == "1":
                                 new_id = input("ID jadide ghatar ra vared konid: ")
