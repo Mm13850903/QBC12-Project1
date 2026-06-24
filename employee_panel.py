@@ -34,25 +34,32 @@ def login_employee(employees_list):
                 return None
 
 def add_line(lines_list):
-    print("--- Add New Line ---")
+    print("--- Add New Line (Type 'exit' to cancel)---")
 
     name = input("Enter Line Name: ").strip()
+    if name.lower() == "exit": return
+    
     for line in lines_list:
         if line.name == name:
             print(f"Error: Line '{name}' already exists!")
             return
     
     source = input("Enter Source: ").strip()
+    if source.lower() == "exit": return
 
     destination = input("Enter Destination: ").strip()
+    if destination.lower() == "exit": return
 
-    station_count = int(input("Enter number of stations: ").strip())
+    station_count = input("Enter number of stations: ").strip()
+    if station_count.lower() == "exit": return
+    station_count = int(station_count)
 
     stations_names = []
     print(f"Please enter the names of {station_count} stations:")
-    for i in range(stations_names):
-         s_name = input(f"Station {i+1} Name: ").strip()
-         stations_names.append(s_name)
+    for i in range(station_count):
+        s_name = input(f"Station {i+1} Name: ").strip()
+        if s_name.lower() == "exit": return
+        stations_names.append(s_name)
 
     
     new_line = Line(name, source, destination, station_count, stations_names)
@@ -80,7 +87,7 @@ def display_employee_panel(current_employee):
             case "1":
                   add_line(lines_list)
 
-                  
+
             case "2":
 
                             while True:
