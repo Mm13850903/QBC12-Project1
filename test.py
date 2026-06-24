@@ -86,7 +86,7 @@ while True:
                                 print("try again")
                                 continue
 
-                            print(f"\nKhat yaft shod! :)) -> Name: {temp.name} || Mabda: {temp.source} || Maghsad: {temp.destination} || Tedad Istgah-ha: {temp.station_count}")
+                            print(f"Khat yaft shod! :)) -> Name: {temp.name} || Mabda: {temp.source} || Maghsad: {temp.destination} || Tedad Istgah-ha: {temp.station_count}")
                             print("1. Edit Name Khat")
                             print("2. Edit Mabda")
                             print("3. Edit Maghsad")
