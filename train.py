@@ -8,3 +8,21 @@ class Train:
         self.quality = quality
         self.price = price
         self.capacity = capacity
+
+
+    def get_train_id(self):
+        return self.train_id
+    def get_name(self):
+        return self.name
+    def get_line_name(self):
+        return self.line_name
+    def get_speed(self):
+        return self.speed
+    def get_stop_time(self):
+        return self.stop_time
+    def get_quality(self):
+        return self.quality
+    def get_price(self):
+        return self.price
+    def get_capacity(self):
+        return self.capacity
