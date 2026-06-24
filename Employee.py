@@ -1,4 +1,6 @@
 import re
+from line import Line
+from train import Train
 
 class Employee:
     def __init__(self, username, password, name, email):
@@ -6,25 +8,6 @@ class Employee:
         self.password = password
         self.name = name
         self.email = email
-
-class Line:
-    def __init__(self, name, source, destination, station_count, stations):
-        self.name = name
-        self.source = source
-        self.destination = destination
-        self.station_count = station_count
-        self.stations = stations
-
-class Train:
-    def __init__(self, train_id, name, line_name, speed, stop_time, quality, price, capacity):
-        self.train_id = train_id
-        self.name = name
-        self.line_name = line_name
-        self.speed = speed
-        self.stop_time = stop_time
-        self.quality = quality
-        self.price = price
-        self.capacity = capacity
 
 
 employees_list = [Employee("karmand1", "Kd@1", "reza", "sam@email.com")]
