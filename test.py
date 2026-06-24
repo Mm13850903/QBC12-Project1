@@ -245,7 +245,7 @@ while True:
                             print("8. Edit Zarfiat")
                             print(24 * "-")
 
-                            ch = input("Enter your choice (1-8): ")
+                            ch = input("Enter your choice : ")
 
                             if ch == "1":
                                 new_id = input("ID jadide ghatar ra vared konid: ")
