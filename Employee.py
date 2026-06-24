@@ -1,6 +1,4 @@
 import re
-from line import Line
-from train import Train
 
 class Employee:
     def __init__(self, username, password, name, email):
@@ -10,7 +8,7 @@ class Employee:
         self.email = email
 
 def is_valid_password(password):
-    pattern = r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[&@])[a-zA-Z0-9&@]+$'
+    pattern = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[&@])[a-zA-Z0-9&@]{8,}$'
     temp = re.match(pattern, password)
     if temp:
         return True

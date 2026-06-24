@@ -1,6 +1,6 @@
-from Employee import Employee
-import Line
-import Train
+from employee import Employee
+from line import Line
+from train import Train
 
 
 employees_list = [Employee("karmand1", "Kd@1", "reza", "sam@email.com")]
