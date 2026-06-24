@@ -1,3 +1,4 @@
+
 def start_menu():
     while True:
         print("salam ! khosh oomadi :)")
@@ -8,7 +9,7 @@ def start_menu():
         choice = input("koja beram ?: ")
         match choice:
             case "1":
-                pass
+                admin_login()
             case "2":
                 pass
             case "3":
@@ -19,3 +20,30 @@ def start_menu():
                 break
             case _ :
                 print("Lotfan ye adad beyn 1 ta 4 entekhab kon !!!")
+
+
+def admin_login():
+    admin_list = {"Admin_Train" : "Pass_Train"}
+    while True:
+        print("1.Bazgasht")
+        user_name = input("user name: ")
+        if user_name == "1":
+            return
+        else :
+            password = input("password: ")
+            is_logged_in = False
+            for k , v in admin_list.items():
+                if k == user_name and v == password:
+                    is_logged_in = True
+                    break
+            if is_logged_in :
+                print("login success")
+                admin_panel()
+                return
+            else :
+                print("login failed")
+                print("Dobare emtehan kon")
+
+def admin_panel():
+    print("welcome to admin panel")
+    input() #place holder
