@@ -2,6 +2,7 @@
 def start_menu():
     while True:
         print("salam ! khosh oomadi :)")
+        print("-"*24)
         print("1.Admin Panel")
         print("2.Train Employee Panel")
         print("3.Customer Panel")
@@ -23,20 +24,16 @@ def start_menu():
 
 
 def admin_login():
-    admin_list = {"Admin_Train" : "Pass_Train"}
+    admin_info = ("Admin_Train" , "Pass_Train")
     while True:
-        print("1.Bazgasht")
+        print("0.Bazgasht")
         user_name = input("user name: ")
-        if user_name == "1":
+        if user_name == "0":
             return
         else :
             password = input("password: ")
             is_logged_in = False
-            for k , v in admin_list.items():
-                if k == user_name and v == password:
-                    is_logged_in = True
-                    break
-            if is_logged_in :
+            if (user_name, password) == admin_info :
                 print("login success")
                 admin_panel()
                 return
@@ -45,6 +42,25 @@ def admin_login():
                 print("Dobare emtehan kon")
 
 def admin_panel():
-    print("welcome to admin panel")
-    input() #place holder
+    while True:
+        print("Khosh oomadi admin jan :)")
+        print("-"*24)
+        print("1.Insert Employee")
+        print("2.Remove Employee")
+        print("3.List of Employees")
+        print("4.Exit")
+        choice = input("koja beram ?: ")
+        match choice:
+            case "1":
+                pass
+            case "2":
+                pass
+            case "3":
+                pass
+            case "4":
+                break
+            case _:
+                print("Lotfan ye adad beyn 1 ta 4 entekhab kon !!!")
 
+
+start_menu()
