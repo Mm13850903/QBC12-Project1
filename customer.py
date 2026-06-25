@@ -1,6 +1,15 @@
 import re
 
 
+def login_required(func):
+    def wrapper(self, *args, **kwargs):
+        if not self.is_logged_in:
+            return False
+        return func(self, *args, **kwargs)
+
+    return wrapper
+
+
 class Customer:
     email_pattern = re.compile(r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
     password_pattern = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@&]).+$')
@@ -11,6 +20,7 @@ class Customer:
         self.email = email
         self.password = password
         self.my_cards = []
+        self.__is_logged_in = False
 
     @property
     def username(self):
@@ -42,6 +52,10 @@ class Customer:
     def check_password(self, password):
         return self.__password == password
 
+    @property
+    def is_logged_in(self):
+        return self.__is_logged_in
+
     def add_customer(self):
         if Customer.find_username(self.username) is not None:
             return False
@@ -50,18 +64,13 @@ class Customer:
         Customer.customer_list.append(self)
         return True
 
+    @login_required
     def add_card(self, card):
         found_card = self.find_card(card.card_id)
         if found_card is not None:
             return False
         self.my_cards.append(card)
         return True
-
-    def find_card(self, card_id):
-        for card in self.my_cards:
-            if card.card_id == card_id:
-                return card
-        return None
 
     @classmethod
     def find_username(cls, username):
@@ -77,9 +86,34 @@ class Customer:
                 return customer
         return None
 
+    def find_card(self, card_id):
+        for card in self.my_cards:
+            if card.card_id == card_id:
+                return card
+        return None
+
+    @login_required
     def remove_card(self, card):
         found_card = self.find_card(card.card_id)
         if found_card is None:
             return False
         self.my_cards.remove(found_card)
         return True
+
+    def login(self, password):
+        if self.check_password(password):
+            self.__is_logged_in = True
+            return True
+        return False
+
+    def logout(self):
+        self.__is_logged_in = False
+
+    @classmethod
+    def authenticate(cls, username, password):
+        customer = cls.find_username(username)
+        if customer is None:
+            return None
+        if customer.login(password):
+            return customer
+        return None
