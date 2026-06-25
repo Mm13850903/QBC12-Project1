@@ -423,6 +423,25 @@ def edit_train(trains_list, lines_list):
             case _:
                 print("Invalid choice. Please try again.")
 
+def delete_train(trains_list, lines_list):
+    print("--- Delete Train (Type 'exit' to cancel) ---")
+
+    if not trains_list:
+        print("The train list is empty. Nothing to delete.")
+        return
+    
+    while True:
+        target_id = input("Enter Train ID to delete (or type 'exit' to return): ")
+
+        if target_id.lower() == "exit" : return
+
+        selected_train = next((t for t in trains_list if t.train_id == target_id), None)
+
+        if selected_train:
+            trains_list.remove(selected_train)
+            print(f"Train with ID '{target_id}' has been deleted successfully.")
+        else:
+            print(f"Error: No train found with ID '{target_id}'. Please try again.")
 
 
     
@@ -480,25 +499,8 @@ def display_employee_panel(current_employee):
                 edit_train(trains_list, lines_list)
 
             case "7":
-
-                            while True:
-                                train_id = input("ID Ghatar Baray Hazf")
-                                if train_id.islower() == "back":
-                                    break
-
-                                found_train = None
-                                for t in trains_list:
-                                    if t.train_id == train_id:
-                                        found_train = t
-                                        break
-
-                                if found_train is None:
-                                    print("Error: Ghatar ba in ID mojood nist! :((")
-                                    continue
-
-                                trains_list.remove(found_train)
-                                print("Ghatar Ba Mofaghiat Remove Shod :))")
-                                break
+                delete_train(trains_list)
+                
             case "8":
                             print("List Ghatar hay Sabt Shodeh ")
                             if len(trains_list) == 0:
