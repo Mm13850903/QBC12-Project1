@@ -27,6 +27,8 @@ def start_menu():
 def admin_login():
     admin_info = ("Admin_Train" , "Pass_Train")
     while True:
+        print("Admin Panel")
+        print("-"*24)
         print("0.Bazgasht")
         user_name = input("user name: ")
         if user_name == "0":
@@ -55,9 +57,9 @@ def admin_panel():
             case "1":
                 insert_employee()
             case "2":
-                pass
+                remove_employee()
             case "3":
-                pass
+                list_of_employees()
             case "4":
                 break
             case _:
@@ -107,3 +109,37 @@ def insert_employee():
         employees[user_name] = new_employee
         print(f"Karmande {first_name} {last_name} ba movafaghiyat ezafe shod !")
         return
+
+
+def remove_employee():
+    while True:
+        print("Hazf kardane karmand")
+        print("0.bazgasht")
+
+        user_name = input("user name: ")
+        if user_name == "0":
+            return
+        if user_name in employees :
+            employees.pop(user_name)
+            print("Karbar ba movafaghiyat hazf shod !")
+            return
+        else :
+            print("Karbar morede nazar dar list yaft nashod !")
+            continue
+
+def list_of_employees():
+    while True:
+        if len(employees) == 0:
+            print("Karmandi voojod nadarad")
+            return
+        else :
+            print("liste karmandan :")
+            for employee in employees.values() :
+                print(f"username:{employee.username} | Name:{employee.first_name} {employee.last_name} | Email:{employee.email}")
+
+            bazgasht = input("0.bazgasht : ")
+            if bazgasht == "0":
+                return
+            else :
+                print("lotfan faghat adad 0 ra vared konid !")
+                continue
