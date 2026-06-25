@@ -2,7 +2,6 @@ from employee import Employee
 from line import Line
 from train import Train
 
-
 employees_list = [Employee("karmand1", "Kd@1", "reza", "sam@email.com")]
 lines_list = []
 trains_list = []
@@ -443,15 +442,6 @@ def delete_train(trains_list, lines_list):
         else:
             print(f"Error: No train found with ID '{target_id}'. Please try again.")
 
-
-    
-             
-
-
-    
-            
-
-
 def display_employee_panel(current_employee):
     while True:
 
@@ -499,7 +489,7 @@ def display_employee_panel(current_employee):
                 edit_train(trains_list, lines_list)
 
             case "7":
-                delete_train(trains_list)
+                delete_train(trains_list, lines_list)
 
             case "8":
                 print("--- Information Trains ---")
@@ -517,20 +507,6 @@ def display_employee_panel(current_employee):
                 print("Exiting Employee Panel. Returning to the start menu...")
                 break
 
-
-            case _ :
-                    count +=1
-                    if count >= 3:
-                        print("Az Kol Shans Hat Estefadeh Kardi!")
-                        input("Baraye bazgasht Enter bezanid...")
-                        break
-                    print("Error: Username Ya Password eshtebah hast ")
-                    print(f" Shoma {3-count} bar dige forsat darid")
-                    print("Please Try again")
-
-
-
-
-
-
-
+            case _:
+                print("Invalid choice. Please enter a number between 1 and 9.")
+                input("Press Enter to continue...")
