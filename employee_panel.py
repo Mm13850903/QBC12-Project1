@@ -200,17 +200,17 @@ def display_employee_panel(current_employee):
                 delete_line(lines_list)
 
             case "4":
+                print("--- Information Lines ---")
 
-                            print(" List Khatoot Sabt Shodeh ")
-                            if len(lines_list) == 0:
-                                print("Hich khati sabt nashodeh ast.")
-                            for line in lines_list:
-                                res = ""
-                                for station in line.stations:
-                                    res += station + " ---->> "
-                                print(
-                                    f"Khat: {line.name} | Masir: {line.source} be {line.destination} | Istgah-ha: {res} End")
-                            input("Baraye bazgasht Enter bezanid...")
+                if not lines_list:
+                    print("No lines have been registered yet!")
+                else:
+                    print("--- Registered Railway Lines ---")
+                    for line in lines_list:
+                        line.show_information()
+
+                input("Press Enter to return to menu...")
+
             case "5":
 
                             while True:
