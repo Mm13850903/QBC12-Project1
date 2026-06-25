@@ -1,11 +1,13 @@
+from classes import staff
+
 def Main_menu():
     while True:
         print("Welcome to Quera railway")
         print("1.Admin panel")
         print("2.Train employee panel")
         print("3.Customer panel")
-        print("4.Exit railway!")
-        choice = input("Please enter 1-4 to continue:")
+        print("4.Exit railway!\n")
+        choice = input("Please enter 1-4 to continue:\n")
         if choice == "1":
             Admin_login()
         elif choice == "2":
@@ -22,14 +24,18 @@ def Admin_panel():
         print("1.Add an employee to railway system")
         print("2.Remove an employee from railway system")
         print("3.See all employees")
-        print("4.Return to main menu")
+        print("4.Return to main menu\n")
         choice = input("Please enter 1-4 to continue:")
         match choice:
-            case 1:
+            case "1":
+                #fname = input("Employee's first name:")
+                #lname = input("Employee's last name:")
+                #email = input("Employee's email:")
+                #username = input("Please enter :")
                 pass
-            case 2:
+            case "2":
                 pass
-            case 3:
+            case "3":
                 pass
             case "4":
                 return
@@ -37,7 +43,7 @@ def Admin_panel():
 def Admin_login():
     admin_essentials = ("Admin_Train", "Pass_train")
     while True:
-        username = input("Please enter your username, Or enter 0 to exit to main menu:")
+        username = input("Please enter your username, Or enter 0 to exit to main menu:\n")
         if username == "0":
             break
         else:
