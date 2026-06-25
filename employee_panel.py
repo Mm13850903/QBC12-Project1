@@ -83,6 +83,10 @@ def add_line(lines_list):
 def edit_line(lines_list):
     print("--- Edit Line (Type 'exit' to cancel) ---")
 
+    if not lines_list:
+        print("There are no lines to edit.")
+        return
+
     selected_line = None
 
     while True:
@@ -161,6 +165,10 @@ def edit_line(lines_list):
 def delete_line(lines_list):
     print("--- Delete Line (Type 'exit' to cancel) ---")
 
+    if not lines_list:
+        print("There are no lines to delete.")
+        return
+
     selected_line = None
 
     while True:
@@ -234,7 +242,190 @@ def add_train(trains_list, lines_list):
     trains_list.append(new_train)
     print(f"Train '{name}' added!")
              
+def edit_train(trains_list, lines_list):
+    print("--- Edit Train (Type 'exit' to cancel) ---")
 
+    if not trains_list:
+        print("The train list is empty.")
+        return
+    
+    while True:
+        target_id = input("Enter Train ID to update (or 'exit' to return): ").strip()
+        if target_id.lower() == 'exit':
+            return
+        
+        selected_train = next((t for t in trains_list if t.train_id == target_id), None)
+        
+        if selected_train:
+            break
+        else:
+            print("No train found with this ID. Try again.")
+
+    while True:
+        print(f"--- Updating Train: {selected_train.name} (ID: {selected_train.train_id}) ---")
+        print("1. Edit Train ID")
+        print("2. Edit Name")
+        print("3. Edit Line Name")
+        print("4. Edit Speed")
+        print("5. Edit Stop Time")
+        print("6. Edit Quality")
+        print("7. Edit Price")
+        print("8. Edit Capacity")
+        print("9. Back")
+
+        choice = input("What do you want to update? ").strip()
+
+        match choice:
+            case "1":
+                new_id = input("Enter new train ID: ").strip()
+                if new_id.lower() == "exit":
+                    return
+
+                if not new_id:
+                    print("Train ID not changed (input was empty).")
+                    continue
+
+                id_exists = False
+                for train in trains_list:
+                    if train.train_id != selected_train.train_id and train.train_id == new_id:
+                        id_exists = True
+                        break
+
+                if id_exists:
+                    print(f"Error: '{new_id}' is already used by another train.")
+                else:
+                    selected_train.train_id = new_id
+                    print("Train ID Updated!")
+
+            case "2":
+                new_name = input("Enter new name: ").strip()
+                if new_name.lower() == "exit":
+                    return
+
+                if not new_name:
+                    print("Name not changed (input was empty).")
+                    continue
+
+                name_exists = False
+                for train in trains_list:
+                    if train.train_id != selected_train.train_id and train.name.lower() == new_name.lower():
+                        name_exists = True
+                        break
+
+                if name_exists:
+                    print(f"Error: '{new_name}' is already taken by another train.")
+                else:
+                    selected_train.name = new_name
+                    print("Name Updated!")
+
+            case "3":
+                if not lines_list:
+                    print("No lines available.")
+                    continue
+
+                print("\nAvailable Lines:")
+                for i, line in enumerate(lines_list, 1):
+                    print(f"{i}. {line.name}")
+
+                line_choice = input("Select new line number: ").strip()
+                if line_choice.lower() == "exit":
+                    return
+
+                try:
+                    line_index = int(line_choice) - 1
+                    if 0 <= line_index < len(lines_list):
+                        selected_train.line_name = lines_list[line_index].name
+                        print("Line Name Updated!")
+                    else:
+                        print("Invalid line number.")
+                except ValueError:
+                    print("Please enter a valid number.")
+
+            case "4":
+                new_speed_str = input(f"Enter new speed (current: {selected_train.speed}): ").strip()
+                if new_speed_str.lower() == "exit":
+                    return
+
+                if not new_speed_str:
+                    print("Speed not changed (input was empty).")
+                    continue
+
+                try:
+                    selected_train.speed = float(new_speed_str)
+                    print("Speed Updated!")
+                except ValueError as e:
+                    print(f"Error: {e}")
+
+            case "5":
+                new_stop_time_str = input(f"Enter new stop time (current: {selected_train.stop_time}): ").strip()
+                if new_stop_time_str.lower() == "exit":
+                    return
+
+                if not new_stop_time_str:
+                    print("Stop time not changed (input was empty).")
+                    continue
+
+                try:
+                    selected_train.stop_time = float(new_stop_time_str)
+                    print("Stop Time Updated!")
+                except ValueError as e:
+                    print(f"Error: {e}")
+
+            case "6":
+                new_quality_str = input(f"Enter new quality (current: {selected_train.quality}): ").strip()
+                if new_quality_str.lower() == "exit":
+                    return
+
+                if not new_quality_str:
+                    print("Quality not changed (input was empty).")
+                    continue
+
+                try:
+                    selected_train.quality = int(new_quality_str)
+                    print("Quality Updated!")
+                except ValueError as e:
+                    print(f"Error: {e}")
+
+            case "7":
+                new_price_str = input(f"Enter new price (current: {selected_train.price}): ").strip()
+                if new_price_str.lower() == "exit":
+                    return
+
+                if not new_price_str:
+                    print("Price not changed (input was empty).")
+                    continue
+
+                try:
+                    selected_train.price = float(new_price_str)
+                    print("Price Updated!")
+                except ValueError as e:
+                    print(f"Error: {e}")
+
+            case "8":
+                new_capacity_str = input(f"Enter new capacity (current: {selected_train.capacity}): ").strip()
+                if new_capacity_str.lower() == "exit":
+                    return
+
+                if not new_capacity_str:
+                    print("Capacity not changed (input was empty).")
+                    continue
+
+                try:
+                    selected_train.capacity = int(new_capacity_str)
+                    print("Capacity Updated!")
+                except ValueError as e:
+                    print(f"Error: {e}")
+
+            case "9":
+                print("Returning...")
+                break
+
+            case _:
+                print("Invalid choice. Please try again.")
+
+
+
+    
              
 
 
@@ -286,108 +477,8 @@ def display_employee_panel(current_employee):
                     add_train(trains_list, lines_list)
 
             case "6":
+                edit_train(trains_list, lines_list)
 
-                            while True:
-                                train_id = input("ID Ghatar Baraye update: ")
-                                if train_id.lower() == 'back':
-                                        break
-
-                                found_train = None
-                                for t in trains_list:
-                                    if t.train_id == train_id:
-                                        found_train = t
-                                        break
-
-                                if found_train is None:
-                                    print("Error: Ghatar ba in ID mojood nist!")
-                                    continue
-
-                                print(f"Ghatar yaft shod! --->> ID: {found_train.train_id} || Name: {found_train.name} || Khat: {found_train.line_name}")
-                                print("1. Edit ID Ghatar")
-                                print("2. Edit Name Ghatar")
-                                print("3. Edit Khat Harakat ")
-                                print("4. Edit Sorat Motevasset")
-                                print("5. Edit Mizan Tavaghof Dar Istgah")
-                                print("6. Edit Darajeh Keifiat")
-                                print("7. Edit Hazineh Belit")
-                                print("8. Edit Zarfiat")
-                                print(24 * "-")
-
-                                ch = input("Enter your choice (1-8): ")
-
-                                if ch == "1":
-                                    new_id = input("ID jadide ghatar ra vared konid: ")
-                                    duplicate = False
-                                    for t in trains_list:
-                                        if t.train_id == new_id and t != found_train:
-                                            duplicate = True
-                                            break
-                                    if duplicate:
-                                        print("Error: In ID ghablan baraye ghatari diger sabt shodeh ast!")
-                                    else:
-                                        found_train.train_id = new_id
-                                        print("ID ghatar ba mofaghaghiat update shod.")
-
-
-                                elif ch == "2":
-                                    found_train.name = input("Name jadid: ")
-                                    print("Name ghatar ba mofaghaghiat update shod.")
-
-
-                                elif ch == "3":
-                                    new_line_name = input("Name Khat Harakat jadid: ")
-                                    line_exists = False
-                                    for line in lines_list:
-                                        if line.name == new_line_name:
-                                            line_exists = True
-                                            break
-                                    if not line_exists:
-                                        print("Error: In khat mojood nist! Avval bayad khat ra besazid.")
-                                    else:
-                                        found_train.line_name = new_line_name
-                                        print("Khat harakat ghatar ba mofaghaghiat update shod.")
-
-
-                                elif ch == "4":
-                                    speed = input("Sorat Motevasset jadid: ")
-                                    if speed.isdigit():
-                                        found_train.speed = int(speed)
-                                        print("Sorat ba mofaghaghiat update shod.")
-                                    else:
-                                        print("Error: Sorat bayad adad bashad!")
-
-
-                                elif ch == "5":
-                                    stop_time = input("Mizan Tavaghof jadid (Daghigheh): ")
-                                    if stop_time.isdigit():
-                                        found_train.stop_time = int(stop_time)
-                                        print("Mizan tavaghof ba mofaghaghiat update shod.")
-                                    else:
-                                        print("Error: Zaman tavaghof bayad adad bashad!")
-
-
-                                elif ch == "6":
-                                    found_train.quality = input("Darajeh Keifiat jadid: ")
-                                    print("Darajeh keifiat ba mofaghaghiat update shod.")
-
-
-                                elif ch == "7":
-                                    price = input("Hazineh Belit jadid: ")
-                                    if price.isdigit():
-                                        found_train.price = int(price)
-                                        print("Hazineh belit ba mofaghaghiat update shod.")
-                                    else:
-                                        print("Error: Hazineh belit bayad adad bashad!")
-
-
-                                elif ch == "8":
-                                    capacity = input("Zarfiat jadid: ")
-                                    if capacity.isdigit():
-                                        found_train.capacity = int(capacity)
-                                        print("Zarfiat ba mofaghaghiat update shod.")
-                                    else:
-                                        print("Error: Zarfiat bayad adad bashad!")
-                                break
             case "7":
 
                             while True:
