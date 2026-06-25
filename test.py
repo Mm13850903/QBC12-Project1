@@ -1,6 +1,10 @@
 from Employee import Employee
+from script import f1, f2
+from Buy_ticket import buy_ticket_panel
 import Line
 import Train
+
+
 
 
 employees_list = [Employee("karmand1", "Kd@1", "reza", "sam@email.com")]
@@ -43,17 +47,21 @@ while True:
                     if x == "1":
                         while True:
                             name = input("Name Khat: ")
+                            if name.islower() == "back":
+                                break
+
                             duplicate = False
                             for i in lines_list:
                                 if i.name == name:
                                     duplicate = True
                                     break
+
                             if duplicate:
                                 print("Error: Name Khat Tekrari Hast!")
                                 continue
                             source = input("Mabda: ")
                             destination = input("Maghsad: ")
-                            station_count = input("Tedad Istgah ha: ")
+                            station_count = input("Tedad Istgah ha: ") # edit
                             if station_count.isdigit():
                                 station_count = int(station_count)
                             else:
