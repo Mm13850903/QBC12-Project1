@@ -17,7 +17,35 @@ def Main_menu():
         elif choice == "4":
             print("Goodbye!")
             break
+        else:
+            print("Wrong input! Please try again.\n")
 
+def add_employee():
+    employee_list = {}
+    employee_email = []
+    employee_username = []
+    fname = input("Employee's first name:\n")
+    lname = input("Employee's last name:\n")
+    while True:
+        email = input("Employee's email:\n")
+        if email in employee_email:
+            print("This email already exists. Please enter another one.")
+            continue
+        else:
+            employee_email.append(email)
+            break
+    while True:    
+        username = input("Please enter a username for employee:\n")
+        if username in employee_username:
+            print("This username already exists. Try another one.")
+            continue
+        else:
+            employee_username.append(username)
+            break
+    #password = 
+
+def remove_employee():
+    pass
 
 def Admin_panel():
     while True:
@@ -25,13 +53,10 @@ def Admin_panel():
         print("2.Remove an employee from railway system")
         print("3.See all employees")
         print("4.Return to main menu\n")
-        choice = input("Please enter 1-4 to continue:")
+        choice = input("Please enter 1-4 to continue:\n")
         match choice:
             case "1":
-                #fname = input("Employee's first name:")
-                #lname = input("Employee's last name:")
-                #email = input("Employee's email:")
-                #username = input("Please enter :")
+                
                 pass
             case "2":
                 pass
@@ -47,7 +72,7 @@ def Admin_login():
         if username == "0":
             break
         else:
-            password = input("Please enter your password:")
+            password = input("Please enter your password:\n")
             if (username, password) == admin_essentials:
                 print("You've logged in successfuly")
                 print("Welcome to admin panel.")
