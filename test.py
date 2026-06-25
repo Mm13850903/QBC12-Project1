@@ -172,7 +172,7 @@ while True:
 
                     elif x == "5":
                         while True:
-                            print("Baray bazgasht type <bach> please ")
+                            print("Baray bazgasht type <back> please ")
                             train_id = input("ID Ghatar :")
                             if train_id.islower() == "back":
                                 break
