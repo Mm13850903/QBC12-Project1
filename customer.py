@@ -15,8 +15,10 @@ class Customer:
     password_pattern = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@&]).+$')
     customer_list = []
 
-    def __init__(self, username, email, password):
+    def __init__(self, username, name, email, password):
+        Customer.validate_username(username)
         self.__username = username
+        self.name = name
         self.email = email
         self.password = password
         self.my_cards = []
@@ -117,3 +119,37 @@ class Customer:
         if customer.login(password):
             return customer
         return None
+
+    @login_required
+    def update_profile(self,name=None, email=None, password=None):
+        if name is not None:
+            self.name = name
+        if email is not None:
+            self.email = email
+        if password is not None:
+            self.password = password
+        return True
+
+    @staticmethod
+    def validate_username(username):
+        if Customer.find_username(username):
+            raise ValueError("Username already exists")
+
+    @classmethod
+    def signup(cls, username, name, email, password):
+        customer = cls(username, name, email, password)
+        if not customer.add_customer():
+            return None
+        return customer
+
+    def __str__(self):
+        return (
+            f"Username: {self.username}\n"
+            f"Name: {self.name}\n"
+            f"Email: {self.email}\n"
+            f"Cards: {len(self.my_cards)}"
+        )
+
+    @login_required
+    def view_profile(self):
+        return str(self)
