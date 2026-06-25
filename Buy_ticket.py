@@ -1,3 +1,6 @@
+import datetime
+
+
 def buy_ticket_panel(trains_list, lines_list):
     print("--- Panel Kharid Belit ---")
 
@@ -56,9 +59,12 @@ def buy_ticket_panel(trains_list, lines_list):
         else:
 
             found_train.capacity = found_train.capacity - count
+            total_price = count * found_train.price
+
             print(24 * "-")
             print("Purchase completed successfully :))")
-            print(f"{count} ticket baraye masir '{found_train.line_name}' kharidari shod.")
+            print(f"{count} ticket baraye masir '{found_train.line_name}' ba kharidari shod.")
+            print(f"Mablaghe Nahaee ticket ha : {total_price}")
             print(f" new remaining capacity: {found_train.capacity}")
             print(24 * "-")
             break
