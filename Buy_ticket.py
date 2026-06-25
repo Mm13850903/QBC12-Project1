@@ -2,7 +2,7 @@ def buy_ticket_panel(trains_list, lines_list):
     print("--- Panel Kharid Belit ---")
 
     if len(trains_list) == 0:
-        print("No trains are currently available for purchase.!")
+        print("No trains are currently available for purchase!")
         return
 
 
@@ -20,7 +20,7 @@ def buy_ticket_panel(trains_list, lines_list):
 
 
     while True:
-        choice = input("\nID ghatar baraye kharid ra vared konid (ya 'back'): ")
+        choice = input("ID ghatar baraye kharid ra vared konid (ya 'back'): ")
         if choice.lower() == "back":
             break
 
