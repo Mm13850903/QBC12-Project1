@@ -7,6 +7,19 @@ employees_list = [Employee("karmand1", "Kd@1", "reza", "sam@email.com")]
 lines_list = []
 trains_list = []
 
+def get_valid_number(prompt):
+    while True:
+        user_input = input(prompt).strip()
+        if user_input.lower() == "exit": return user_input
+        try:
+            number = float(user_input)
+            if number < 0:
+                print("Number must not be negative, try again")
+                continue
+            return number
+        except ValueError:
+            print("Please enter only numbers!")
+
 def login_employee(employees_list):
     print("--- Employee Login ---")
     counter = 0
@@ -83,7 +96,7 @@ def edit_line(lines_list):
                 break
 
         if selected_line:
-            selected_line.show_info()
+            selected_line.show_information()
             break
         else:
             print(f"Error: Line '{target_name}' not found. Please try again.")
@@ -170,7 +183,62 @@ def delete_line(lines_list):
         print("Line Deleted!")
         return
 
-     
+def add_train(trains_list, lines_list):
+    print("--- Add New Train (Type 'exit' to cancel) ---")
+
+    while True:
+        train_id = input("Enter Train ID: ").strip()
+        if train_id.lower() == "exit": return
+
+        if any(t.train_id == train_id for t in trains_list):
+            print("This ID already exists!")
+            continue
+        break
+        
+    if not lines_list:
+        print("No lines available! Create a line first.")
+        return
+    
+    print("Available Lines:")
+    for i, line in enumerate(lines_list,1):
+        print(f"{i} . {line.line_name}")
+
+    line_choice = get_valid_number("Select Line Number (by index): ")
+    if line_choice == "exit" : return
+        
+    try:
+        selected_line = lines_list[int(line_choice) - 1]
+    except (IndexError, ValueError):
+        print("Invalid line selection!")
+        return
+    
+    name = input("Enter Train Name: ").strip()
+    if name.lower() == "exit" : return
+
+    speed = get_valid_number("Enter Speed: ")
+    if speed == "exit" : return
+
+    stop_time = get_valid_number("Enter Speed: ")
+    if stop_time == "exit" : return
+
+    quality = get_valid_number("Enter Quality (1-5): ")
+    if quality == "exit" : return
+
+    price = get_valid_number("Enter Price: ")
+    if price == "exit" : return
+
+    capacity = get_valid_number("Enter Capacity: ")
+    if capacity == "exit" : return
+
+    new_train = Train(train_id, name, selected_line.line_name, speed, stop_time, quality, price, capacity)
+    trains_list.append(new_train)
+    print(f"Train '{name}' added!")
+             
+
+             
+
+
+    
             
 
 
@@ -212,54 +280,11 @@ def display_employee_panel(current_employee):
                 input("Press Enter to return to menu...")
 
             case "5":
+                if not lines_list:
+                    print("No lines available! Please add a line first.")
+                else:
+                    add_train(trains_list, lines_list)
 
-                            while True:
-                                print("Baray bazgasht type <bach> please ")
-                                train_id = input("ID Ghatar :")
-                                if train_id.islower() == "back":
-                                    break
-
-                                duplicate = False
-                                for t in trains_list:
-                                    if t.train_id == train_id:
-                                        duplicate = True
-                                        break
-
-                                if duplicate:
-                                    print("Error: ID Ghatar tekrari Hast!")
-                                    continue
-
-                                line_name = input("Name Khat Baray Harkat: ")
-
-                                line_exists = False
-                                for line in lines_list:
-                                    if line.name == line_name:
-                                        line_exists = True
-                                        break
-
-                                if line_exists == False:
-                                    print("Error: IN Khat Mojood Nist ya Hazf Shodeh ast :))" )
-
-                                name = input("Name Ghatar: ")
-                                speed = input("Sorat Motevasset: ")
-                                stop_time = input("Mizan Tavaghof Dar Har Istgah : ")
-                                quality = input("Darajeh Keifiat: ")
-                                price = input("Hazineh Belit: ")
-                                capacity = input("Zarfiat: ")
-
-                                if speed.isdigit():
-                                    speed = int(speed)
-                                if stop_time.isdigit():
-                                    stop_time = int(stop_time)
-                                if price.isdigit():
-                                    price = int(price)
-                                if capacity.isdigit():
-                                    capacity = int(capacity)
-
-                                new_train = Train.Train(train_id, name, speed, stop_time, quality, price, capacity)
-                                trains_list.append(new_train)
-                                print("Ghatar ba Mofaghiat ezafeh Shod :))")
-                                break
             case "6":
 
                             while True:
