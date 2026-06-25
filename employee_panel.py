@@ -514,9 +514,8 @@ def display_employee_panel(current_employee):
                 input("Press Enter to return to menu...")
 
             case "9":
-                            print("Khorooj az Panel Karmand")
-                            break
-                    break
+                print("Exiting Employee Panel. Returning to the start menu...")
+                break
 
 
             case _ :
