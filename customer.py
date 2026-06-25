@@ -1,8 +1,11 @@
 import re
+
+
 class Customer:
     email_pattern = re.compile(r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
     password_pattern = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@&]).+$')
     customer_list = []
+
     def __init__(self, username, email, password):
         self.__username = username
         self.email = email
@@ -21,17 +24,23 @@ class Customer:
     def email(self, value):
         if not Customer.email_pattern.fullmatch(value):
             raise ValueError("Invalid email address")
+        found_email = Customer.find_email(value)
+        if found_email is not None and found_email is not self:
+            raise ValueError("Email already exists")
         self.__email = value
 
     @property
     def password(self):
-        return self.__password
+        raise AttributeError("Password is write-only")
 
     @password.setter
     def password(self, value):
         if not Customer.password_pattern.fullmatch(value):
             raise ValueError("Password must contain letter, digit and one of @ or &")
         self.__password = value
+
+    def check_password(self, password):
+        return self.__password == password
 
     def add_customer(self):
         if Customer.find_username(self.username) is not None:
@@ -41,28 +50,28 @@ class Customer:
         Customer.customer_list.append(self)
         return True
 
-    def add_card(self,card):
+    def add_card(self, card):
         found_card = self.find_card(card.card_id)
         if found_card is not None:
             return False
         self.my_cards.append(card)
         return True
 
-
     def find_card(self, card_id):
         for card in self.my_cards:
             if card.card_id == card_id:
                 return card
         return None
+
     @classmethod
-    def find_username(cls,username):
+    def find_username(cls, username):
         for customer in cls.customer_list:
             if customer.username == username:
                 return customer
         return None
 
     @classmethod
-    def find_email(cls,email):
+    def find_email(cls, email):
         for customer in cls.customer_list:
             if customer.email == email:
                 return customer
