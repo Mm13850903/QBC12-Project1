@@ -75,8 +75,7 @@ def edit_line(lines_list):
     while True:
         target_name = input("Enter the Line Name you want to edit (or 'exit' to back): ").strip()
 
-        if target_name.lower() == "exit" :
-            return
+        if target_name.lower() == "exit" : return
         
         for line in lines_list:
             if line.name == target_name:
@@ -146,7 +145,32 @@ def edit_line(lines_list):
         case "6":
             return
 
+def delete_line(lines_list):
+    print("--- Delete Line (Type 'exit' to cancel) ---")
 
+    selected_line = None
+
+    while True:
+        line_name = input("Enter line name to delete: ").strip()
+
+        if line_name.lower() == "exit": return
+
+        for line in lines_list:
+            if line.name == line_name:
+                selected_line = line
+                break
+
+        if selected_line is None:
+            print("Line not found! Please try again.")
+            continue
+
+        selected_line.show_information()
+        lines_list.remove(selected_line)
+
+        print("Line Deleted!")
+        return
+
+     
             
 
 
@@ -173,23 +197,8 @@ def display_employee_panel(current_employee):
                 edit_line(lines_list)
 
             case "3":
-                            while True:
-                                name = input("Name Khat Baraye Hazf: ")
+                delete_line(lines_list)
 
-                                temp = None
-                                for line in lines_list:
-                                    if line.name == name:
-                                        temp = line
-                                        break
-
-                                if temp is None:
-                                    print("Error : In Khat mojood nist! :((")
-                                    continue
-
-                                lines_list.remove(temp)
-                                print("line Ba Mofaghiat Remove Shod")
-
-                                break
             case "4":
 
                             print(" List Khatoot Sabt Shodeh ")
