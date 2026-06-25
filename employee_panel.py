@@ -150,7 +150,7 @@ def edit_line(lines_list):
                     s_name = input(f"Station {i+1} Name: ").strip()
                     new_stations_list.append(s_name)
                 
-                selected_line.stations_names = new_stations_list
+                selected_line.stations = new_stations_list
                 print("Stations Updated!")
             else:
                 print("Invalid number!")

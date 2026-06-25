@@ -3,8 +3,15 @@ class Line:
         self.name = name
         self.source = source
         self.destination = destination
-        self.station_count = station_count
+        if int(station_count) != len(stations):
+            raise ValueError(f"Error: The number of stations entered ({station_count}) does not match the list of stations ({len(stations)})")
+
+        self.ـstation_count = int(station_count)
         self.stations = stations
+
+    @property
+    def station_count(self):
+        return self._station_count
 
     def get_name(self):
         return self.name
@@ -21,3 +28,6 @@ class Line:
         print(f"Line: {self.name}")
         print(f"Route: {self.source} to {self.destination}")
         print(f"Stations ({self.station_count}): {" -> ".join(self.stations)}")
+
+    def __str__(self):
+        return f"Line: {self.name} | Stations: {self.station_count}"
