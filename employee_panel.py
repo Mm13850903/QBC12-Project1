@@ -500,15 +500,18 @@ def display_employee_panel(current_employee):
 
             case "7":
                 delete_train(trains_list)
-                
-            case "8":
-                            print("List Ghatar hay Sabt Shodeh ")
-                            if len(trains_list) == 0:
-                                print("Hich Ghatari sabt nashodeh ast")
 
-                            for t in trains_list:
-                                print(f"ID: {t.train_id} || Name: {t.name} || Khat: {t.line_name} || Keifiat: {t.quality} || Gheymat: {t.price} || Zarfiat: {t.capacity}")
-                                input("Baraye bazgasht Enter bezanid...")
+            case "8":
+                print("--- Information Trains ---")
+
+                if not trains_list:
+                    print("No trains have been registered yet!")
+                else:
+                    print("--- Registered Trains ---")
+                    for train in trains_list:
+                        train.show_information()
+
+                input("Press Enter to return to menu...")
 
             case "9":
                             print("Khorooj az Panel Karmand")

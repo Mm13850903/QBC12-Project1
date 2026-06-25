@@ -89,5 +89,16 @@ class Train:
         self.validate_non_negative(value, "Capacity")
         self._capacity = value
 
+    def show_information(self):
+        print(f"ID: {self.train_id}")
+        print(f"Name: {self.name}")
+        print(f"Line: {self.line_name}")
+        print(f"Speed: {self.speed} km/h")
+        print(f"Stop Time: {self.stop_time} min")
+        print(f"Quality: {self.quality}")
+        print(f"Price: {self.price}")
+        print(f"Capacity: {self.capacity}")
+
+    
     def __str__(self):
         return f"Train ID: {self.train_id}, Name: {self.name}, Line: {self.line_name}, Speed: {self.speed}, Stop Time: {self.stop_time}, Quality: {self.quality}, Price: {self.price}, Capacity: {self.capacity}"
