@@ -4,11 +4,11 @@ class Train:
         self.train_id = train_id
         self.train_name = train_name
         self.line = line
-        self.capacity = capacity
-        self.speed = 0
-        self.stop = 0
+        self._capacity = capacity
+        self._speed = 0
+        self._stop = 0
         self.quality = ""
-        self.price = 0
+        self._price = 0
 
     def add_train(self):
         if Train.find_train(self.train_id) is None:
@@ -35,23 +35,15 @@ class Train:
         self.train_name = train_name
     def update_line(self, line):
         self.line = line
-    def update_capacity(self, capacity):
-        self.capacity = capacity
-    def update_speed(self, speed):
-        self.speed = speed
-    def update_stop(self, stop):
-        self.stop = stop
     def update_quality(self, quality):
         self.quality = quality
-    def update_price(self, price):
-        self.price = price
 
     @classmethod
     def get_all_trains(cls):
         return cls.train_list
     def __str__(self):
         return f"""
-
+    
 Train id: {self.train_id}
 Train name: {self.train_name}
 Line: {self.line}
@@ -61,3 +53,42 @@ Stop: {self.stop}
 Quality: {self.quality}
 Price: {self.price}
 """
+
+    @staticmethod
+    def validate_positive(value, field_name):
+        if value <= 0:
+            raise ValueError(f"{field_name} must be positive")
+
+    @property
+    def capacity(self):
+        return self._capacity
+    @capacity.setter
+    def capacity(self, value):
+        Train.validate_positive(value, "Capacity")
+        self._capacity = value
+
+    @property
+    def speed(self):
+        return self._speed
+    @speed.setter
+    def speed(self, value):
+        Train.validate_positive(value, "Speed")
+        self._speed = value
+
+    @property
+    def stop(self):
+        return self._speed
+
+    @stop.setter
+    def stop(self, value):
+        Train.validate_positive(value, "Stop")
+        self._stop = value
+
+    @property
+    def price(self):
+        return self._price
+
+    @price.setter
+    def price(self, value):
+        Train.validate_positive(value, "price")
+        self._price = value
