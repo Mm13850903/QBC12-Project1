@@ -1,19 +1,8 @@
-class Admin:
-    
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-
-    def add_staff(self):
-        pass
-
-
-
-
-
 class staff:
-
-    def __init__(self, username, password):
+    def __init__(self, fname, lname, email, username, password):
+        self.fname = fname
+        self.lname = lname
+        self.email = email
         self.username = username
         self.password = password
         
