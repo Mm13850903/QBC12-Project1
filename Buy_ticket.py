@@ -61,10 +61,16 @@ def buy_ticket_panel(trains_list, lines_list):
             found_train.capacity = found_train.capacity - count
             total_price = count * found_train.price
 
+            now = datetime.datetime.now()
+            date = now.strftime("%Y-%m-%d")
+            time = now.strftime("%H:%M:%S")
+            day = now.strftime("%A")
+
             print(24 * "-")
             print("Purchase completed successfully :))")
             print(f"{count} ticket baraye masir '{found_train.line_name}' ba kharidari shod.")
             print(f"Mablaghe Nahaee ticket ha : {total_price}")
+            print(f"Date: {date} | Day: {day} | Time: {time}")
             print(f" new remaining capacity: {found_train.capacity}")
             print(24 * "-")
             break
