@@ -2,7 +2,7 @@ from employee import Employee
 from line import Line
 from train import Train
 
-employees_list = [Employee("karmand1", "Kd@1", "reza", "sam@email.com")]
+#employees_list = []
 lines_list = []
 trains_list = []
 
@@ -19,7 +19,7 @@ def get_valid_number(prompt):
         except ValueError:
             print("Please enter only numbers!")
 
-def login_employee(employees_list):
+def login_employee(employees_list: list[Employee]):
     print("--- Employee Login ---")
     counter = 0
 

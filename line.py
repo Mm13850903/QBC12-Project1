@@ -12,6 +12,12 @@ class Line:
     @property
     def station_count(self):
         return self._station_count
+    
+    @station_count.setter
+    def station_count(self, value):
+        if value < 0:
+            raise ValueError("station_count cannot be negative")
+        self._station_count = value
 
     def get_name(self):
         return self.name
