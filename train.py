@@ -1,5 +1,5 @@
 class Train:
-    def __init__(self, train_id, name, line_name, speed, stop_time, quality, price, capacity):
+    def __init__(self, train_id, name, line_name, speed, stop_time, quality, price, capacity, departure_time, distance):
         self.train_id = train_id
         self.name = name
         self.line_name = line_name
@@ -8,6 +8,8 @@ class Train:
         self.quality = quality
         self.price = price
         self.capacity = capacity
+        self.departure_time = departure_time
+        self.distance = distance
 
     @staticmethod
     def validate_non_negative(value, field_name):
@@ -89,6 +91,23 @@ class Train:
         self.validate_non_negative(value, "Capacity")
         self._capacity = value
 
+    @property
+    def departure_time(self):
+        return self._departure_time
+
+    @departure_time.setter
+    def departure_time(self, value):
+        self._departure_time = value
+
+    @property
+    def distance(self):
+        return self._distance
+
+    @distance.setter
+    def distance(self, value):
+        self.validate_non_negative(value, "Distance")
+        self._distance = value
+
     def show_information(self):
         print(f"ID: {self.train_id}")
         print(f"Name: {self.name}")
@@ -98,6 +117,18 @@ class Train:
         print(f"Quality: {self.quality}")
         print(f"Price: {self.price}")
         print(f"Capacity: {self.capacity}")
+
+    def has_collision(self, other_train):
+        if self.line_name != other_train.line_name:
+            return False
+
+        self_arrival = self.departure_time + (self.distance / self.speed) * 60
+        self_departure = self_arrival + self.stop_time
+
+        other_arrival = other_train.departure_time + (other_train.distance / other_train.speed) * 60
+        other_departure = other_arrival + other_train.stop_time
+
+        return not (self_departure <= other_arrival or self_arrival >= other_departure)
 
     
     def __str__(self):

@@ -225,7 +225,7 @@ def add_train(trains_list, lines_list):
     speed = get_valid_number("Enter Speed: ")
     if speed == "exit" : return
 
-    stop_time = get_valid_number("Enter Speed: ")
+    stop_time = get_valid_number("Enter Stop Time: ")
     if stop_time == "exit" : return
 
     quality = get_valid_number("Enter Quality (1-5): ")
@@ -237,9 +237,26 @@ def add_train(trains_list, lines_list):
     capacity = get_valid_number("Enter Capacity: ")
     if capacity == "exit" : return
 
-    new_train = Train(train_id, name, selected_line.line_name, speed, stop_time, quality, price, capacity)
-    trains_list.append(new_train)
-    print(f"Train '{name}' added!")
+    departure_time = get_valid_number("Enter Departure Time: ")
+    if departure_time == "exit": return
+
+    distance = get_valid_number("Enter Distance to Station: ")
+    if distance == "exit": return
+
+
+    new_train = Train(train_id, name, selected_line.line_name, speed, stop_time, quality, price, capacity, departure_time, distance)
+    collision_found = False
+    for train in trains_list:
+        if new_train.has_collision(train):
+            collision_found = True
+            break
+
+    if collision_found:
+        print("This train has a collision with another train on the same line!")
+    else:
+        trains_list.append(new_train)
+        print(f"Train '{name}' added!")
+
              
 def edit_train(trains_list, lines_list):
     print("--- Edit Train (Type 'exit' to cancel) ---")
