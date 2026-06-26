@@ -2,13 +2,13 @@ from employee_cls import Employee , is_valid_email , is_valid_password ,check_em
 employees = {}
 def start_menu():
     while True:
-        print("salam ! khosh oomadi :)")
+        print("Main Menu :)")
         print("-"*24)
         print("1.Admin Panel")
         print("2.Train Employee Panel")
         print("3.Customer Panel")
         print("4.Exit")
-        choice = input("koja beram ?: ")
+        choice = input("(1-4)?: ")
         match choice:
             case "1":
                 admin_login()
@@ -17,19 +17,19 @@ def start_menu():
             case "3":
                 pass
             case "4":
-                print("Khodafez!")
-                print("Rooze khoobi dashte bashid :)")
+                print("Bye")
+                print("Have a nice day :) ")
                 break
             case _ :
-                print("Lotfan ye adad beyn 1 ta 4 entekhab kon !!!")
+                print("Valid choice !!!")
 
 
 def admin_login():
     admin_info = ("Admin_Train" , "Pass_Train")
     while True:
-        print("Admin Panel")
+        print("Admin Login")
         print("-"*24)
-        print("0.Bazgasht")
+        print("0.Return")
         user_name = input("user name: ")
         if user_name == "0":
             return
@@ -42,17 +42,17 @@ def admin_login():
                 return
             else :
                 print("login failed")
-                print("Dobare emtehan kon")
+                print("Please try again")
 
 def admin_panel():
     while True:
-        print("Khosh oomadi admin jan :)")
+        print("Admin Panel")
         print("-"*24)
         print("1.Insert Employee")
         print("2.Remove Employee")
         print("3.List of Employees")
         print("4.Exit")
-        choice = input("koja beram ?: ")
+        choice = input("(1-4)?: ")
         match choice:
             case "1":
                 insert_employee()
@@ -63,20 +63,20 @@ def admin_panel():
             case "4":
                 break
             case _:
-                print("Lotfan ye adad beyn 1 ta 4 entekhab kon !!!")
+                print("Invalid choice !!!")
 
 
 def employee_validation(password, email, employees_dict):
     if is_valid_password(password) == False:
-        print("Password bayad shamel hoorof , adad , @ ya & bashad !")
+        print("Password must included alphabet , digit , @ or & !!!")
         return False
 
     if is_valid_email(email) == False:
-        print("Format email eshtebah ast")
+        print("Email format is wrong !!!")
         return False
 
     if check_email(email, employees_dict) == True:
-        print("Email ghablan sabt shode ! Yeki dige emtehan kon")
+        print("Email has been already submitted ! try a different one")
         return False
 
     return True
@@ -85,14 +85,14 @@ def employee_validation(password, email, employees_dict):
 
 def insert_employee():
     while True:
-        print("Ezafe kardane karmand")
-        print("0.bazgasht")
+        print("Insert Employee")
+        print("0.Return")
 
         user_name = input("user name: ")
         if user_name == "0":
             return
         if user_name in employees :
-            print("In username ghablan sabt shode ! Yeki dige emtehan kon")
+            print("User name has been already submitted ! try a different one")
             continue
         password = input("password: ")
         first_name = input("first name: ")
@@ -102,44 +102,44 @@ def insert_employee():
         is_valid = employee_validation(password, email, employees)
 
         if is_valid == False:
-            print("Moshkeli to etelaat hast ! Dobare ba deghat por konid")
+            print("Valid info ! try again")
             continue
 
         new_employee = Employee(user_name, password, first_name, last_name, email)
         employees[user_name] = new_employee
-        print(f"Karmande {first_name} {last_name} ba movafaghiyat ezafe shod !")
+        print(f"Employee {first_name} {last_name} inserted successfully !")
         return
 
 
 def remove_employee():
     while True:
-        print("Hazf kardane karmand")
-        print("0.bazgasht")
+        print("Remove Employee")
+        print("0.Return")
 
         user_name = input("user name: ")
         if user_name == "0":
             return
         if user_name in employees :
             employees.pop(user_name)
-            print("Karbar ba movafaghiyat hazf shod !")
+            print("User removed successfully !")
             return
         else :
-            print("Karbar morede nazar dar list yaft nashod !")
+            print("User not found !")
             continue
 
 def list_of_employees():
     while True:
         if len(employees) == 0:
-            print("Karmandi voojod nadarad")
+            print("Null List")
             return
         else :
-            print("liste karmandan :")
+            print("List of Employees :")
             for employee in employees.values() :
                 print(f"username:{employee.username} | Name:{employee.first_name} {employee.last_name} | Email:{employee.email}")
 
-            bazgasht = input("0.bazgasht : ")
+            bazgasht = input("0.Return: ")
             if bazgasht == "0":
                 return
             else :
-                print("lotfan faghat adad 0 ra vared konid !")
+                print("Please just enter 0 for return !")
                 continue
