@@ -233,12 +233,25 @@ def login_customer():
         choice = input("Choose an option: ").strip()
         match choice:
             case "1":
-                username = input("Enter username: ").strip()
-                password = input("Enter password: ")
-                customer = Customer.authenticate(username, password)
-                if customer is not None:
-                    return customer
-                print("Invalid username or password")
+                while True:
+                    username = input("Enter username or 0 to back: ").strip()
+                    if username == "0":
+                        print("Login cancelled")
+                        return None
+                    if not username:
+                        print("Username cannot be empty")
+                        continue
+                    password = input("Enter password or 0 to back: ")
+                    if password == "0":
+                        print("Login cancelled")
+                        return None
+                    if not password:
+                        print("Password cannot be empty")
+                        continue
+                    customer = Customer.authenticate(username, password)
+                    if customer is not None:
+                        return customer
+                    print("Invalid username or password. Please try again.")
             case "2":
                 return None
             case _:
