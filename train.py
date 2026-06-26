@@ -12,6 +12,11 @@ class Train:
         self.distance = distance
 
     @staticmethod
+    def time_to_minutes(time_str):
+        hours, minutes = map(int, time_str.split(":"))
+        return hours * 60 + minutes
+    
+    @staticmethod
     def validate_non_negative(value, field_name):
         if value < 0:
             raise ValueError(f"{field_name} cannot be negative.")
@@ -70,6 +75,7 @@ class Train:
 
     @quality.setter
     def quality(self, value):
+        value = int(value)
         self.validate_non_negative(value, "Quality")
         self._quality = value
 
@@ -125,14 +131,16 @@ class Train:
         if self.line_name != other_train.line_name:
             return False
 
-        self_arrival = self.departure_time + (self.distance / self.speed) * 60
+        self_start = self.time_to_minutes(self.departure_time)
+        other_start = self.time_to_minutes(other_train.departure_time)
+
+        self_arrival = self_start + (self.distance / self.speed) * 60
         self_departure = self_arrival + self.stop_time
 
-        other_arrival = other_train.departure_time + (other_train.distance / other_train.speed) * 60
+        other_arrival = other_start + (other_train.distance / other_train.speed) * 60
         other_departure = other_arrival + other_train.stop_time
 
         return not (self_departure <= other_arrival or self_arrival >= other_departure)
-
     
     def __str__(self):
         return f"Train ID: {self.train_id}, Name: {self.name}, Line: {self.line_name}, Speed: {self.speed}, Stop Time: {self.stop_time}, Quality: {self.quality}, Price: {self.price}, Capacity: {self.capacity}, Departure Time: {self.departure_time}, Distance: {self.distance}"

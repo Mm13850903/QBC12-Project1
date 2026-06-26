@@ -6,7 +6,7 @@ class Line:
         if int(station_count) != len(stations):
             raise ValueError(f"Error: The number of stations entered ({station_count}) does not match the list of stations ({len(stations)})")
 
-        self.ـstation_count = int(station_count)
+        self._station_count = int(station_count)
         self.stations = stations
 
     @property
@@ -33,7 +33,7 @@ class Line:
     def show_information(self):
         print(f"Line: {self.name}")
         print(f"Route: {self.source} to {self.destination}")
-        print(f"Stations ({self.station_count}): {" -> ".join(self.stations)}")
+        print(f"Stations ({self.station_count}): {' -> '.join(self.stations)}")
 
     def __str__(self):
         return f"Line: {self.name} | Stations: {self.station_count}"
