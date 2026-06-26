@@ -256,8 +256,7 @@ def add_train(trains_list, lines_list):
     else:
         trains_list.append(new_train)
         print(f"Train '{name}' added!")
-
-             
+           
 def edit_train(trains_list, lines_list):
     print("--- Edit Train (Type 'exit' to cancel) ---")
 
@@ -287,7 +286,9 @@ def edit_train(trains_list, lines_list):
         print("6. Edit Quality")
         print("7. Edit Price")
         print("8. Edit Capacity")
-        print("9. Back")
+        print("9. Edit Departure Time")
+        print("10. Edit Distance")
+        print("11. Exit")
 
         choice = input("What do you want to update? ").strip()
 
@@ -433,6 +434,46 @@ def edit_train(trains_list, lines_list):
                     print(f"Error: {e}")
 
             case "9":
+                new_departure_time = get_valid_number("Enter new departure time: ")
+                if new_departure_time == "exit":
+                    continue
+
+                old_departure_time = selected_train.departure_time
+                selected_train.departure_time = new_departure_time
+
+                collision_found = False
+                for other_train in trains_list:
+                    if other_train != selected_train and train.has_collision(other_train):
+                        collision_found = True
+                        break
+
+                if collision_found:
+                    train.departure_time = old_departure_time
+                    print("This change causes a collision! Update cancelled.")
+                else:
+                    print("Departure time updated.")
+
+            case "10":
+                new_distance = get_valid_number("Enter new distance: ")
+                if new_distance == "exit":
+                    continue
+
+                old_distance = selected_train.distance
+                selected_train.distance = new_distance
+
+                collision_found = False
+                for other_train in trains_list:
+                    if other_train != selected_train and train.has_collision(other_train):
+                        collision_found = True
+                        break
+
+                if collision_found:
+                    train.distance = old_distance
+                    print("This change causes a collision! Update cancelled.")
+                else:
+                    print("Distance updated successfully.")
+
+            case "11":
                 print("Returning...")
                 break
 

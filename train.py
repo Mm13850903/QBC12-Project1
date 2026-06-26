@@ -117,6 +117,9 @@ class Train:
         print(f"Quality: {self.quality}")
         print(f"Price: {self.price}")
         print(f"Capacity: {self.capacity}")
+        print(f"Departure Time: {self.departure_time}")
+        print(f"Distance: {self.distance}")
+
 
     def has_collision(self, other_train):
         if self.line_name != other_train.line_name:
@@ -132,4 +135,4 @@ class Train:
 
     
     def __str__(self):
-        return f"Train ID: {self.train_id}, Name: {self.name}, Line: {self.line_name}, Speed: {self.speed}, Stop Time: {self.stop_time}, Quality: {self.quality}, Price: {self.price}, Capacity: {self.capacity}"
+        return f"Train ID: {self.train_id}, Name: {self.name}, Line: {self.line_name}, Speed: {self.speed}, Stop Time: {self.stop_time}, Quality: {self.quality}, Price: {self.price}, Capacity: {self.capacity}, Departure Time: {self.departure_time}, Distance: {self.distance}"
