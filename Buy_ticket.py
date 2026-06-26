@@ -23,8 +23,8 @@ def buy_ticket_panel(trains_list, lines_list):
 
 
     while True:
-        choice = input("ID ghatar baraye kharid ra vared konid (ya 'back'): ")
-        if choice.lower() == "back":
+        choice = input("ID ghatar baraye kharid ra vared konid (ya 'exit'): ")
+        if choice.lower() == "exit":
             break
 
         found_train = None
