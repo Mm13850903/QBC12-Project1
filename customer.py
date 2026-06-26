@@ -288,36 +288,70 @@ def edit_profile_menu(customer):
                 print("Invalid option")
 
 def edit_name(customer):
-    new_name = input("Enter new name: ").strip()
-    if not new_name:
-        print("Name cannot be empty")
-        return
-    if customer.update_profile(name=new_name):
-        print("Name updated successfully")
-    else:
-        print("Update failed")
-
-def edit_email(customer):
-    new_email = input("Enter new email: ").strip()
-    try:
-        if customer.update_profile(email=new_email):
-            print("Email updated successfully")
+    while True:
+        new_name = input("Enter new name or 0 to back: ").strip()
+        if new_name == "0":
+            print("Edit name cancelled")
+            return
+        if not new_name:
+            print("Name cannot be empty")
+            continue
+        if customer.update_profile(name=new_name):
+            print("Name updated successfully")
+            print("\nUpdated Profile:")
+            print(customer.view_profile())
+            return
         else:
             print("Update failed")
-    except ValueError as error:
-        print(error)
+            return
+
+def edit_email(customer):
+    while True:
+        new_email = input("Enter new email or 0 to back: ").strip()
+        if new_email == "0":
+            print("Edit email cancelled")
+            return
+        if not new_email:
+            print("Email cannot be empty")
+            continue
+        try:
+            if customer.update_profile(email=new_email):
+                print("Email updated successfully")
+                print("\nUpdated Profile:")
+                print(customer.view_profile())
+                return
+            else:
+                print("Update failed")
+                return
+        except ValueError as error:
+            print(error)
+            continue
 
 def edit_password(customer):
-    old_password = input("Enter current password: ")
-    new_password = input("Enter new password: ")
-    
-    try:
-        if customer.change_password(old_password, new_password):
-            print("Password changed successfully")
-        else:
-            print("Current password is incorrect")
-    except ValueError as error:
-        print(error)
+    while True:
+        old_password = input("Enter current password or 0 to back: ")
+        if old_password == "0":
+            print("Change password cancelled")
+            return
+        new_password = input("Enter new password or 0 to back: ")
+        if new_password == "0":
+            print("Change password cancelled")
+            return
+        if not new_password:
+            print("Password cannot be empty")
+            continue
+        try:
+            if customer.change_password(old_password, new_password):
+                print("Password changed successfully")
+                print("\nUpdated Profile:")
+                print(customer.view_profile())
+                return
+            else:
+                print("Current password is incorrect")
+                continue
+        except ValueError as error:
+            print(error)
+            continue
 
 
 customer_auth_menu()
