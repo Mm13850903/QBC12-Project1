@@ -126,7 +126,7 @@ class Customer:
         return None
 
     @login_required
-    def update_profile(self,name=None, email=None):
+    def update_profile(self, name=None, email=None):
         if name is not None:
             self.name = name
         if email is not None:
@@ -156,3 +156,148 @@ class Customer:
     @login_required
     def view_profile(self):
         return str(self)
+
+
+def customer_auth_menu():
+    while True:
+        print("""
+===== Customer Menu =====
+1. Sign Up
+2. Login
+3. Back
+""")
+
+        choice = input("Choose an option: ").strip()
+        match choice:
+            case "1":
+                signup_customer()
+            case "2":
+                customer = login_customer()
+                if customer is not None:
+                    print("Login successful")
+                    customer_panel(customer)
+            case "3":
+                break
+            case _:
+                print("Invalid option")
+
+def signup_customer():
+    username = input("Enter username: ").strip()
+    name = input("Enter name: ").strip()
+    email = input("Enter email: ").strip()
+    password = input("Enter password: ")
+    
+    if not username:
+        print("Username cannot be empty")
+        return
+    if not name:
+        print("Name cannot be empty")
+        return
+    try:
+
+        customer = Customer.signup(username, name, email, password)
+        if customer is None:
+            print("Sign up failed")
+        else:
+            print("Sign up successful")
+    except ValueError as error:
+        print(error)
+
+def login_customer():
+    while True:
+        print("""
+===== Login =====
+1. Enter username and password
+2. Back
+""")
+        choice = input("Choose an option: ").strip()
+        match choice:
+            case "1":
+                username = input("Enter username: ").strip()
+                password = input("Enter password: ")
+                customer = Customer.authenticate(username, password)
+                if customer is not None:
+                    return customer
+                print("Invalid username or password")
+            case "2":
+                return None
+            case _:
+                print("Invalid option")
+
+def customer_panel(customer):
+    while customer.is_logged_in:
+        print("""
+===== Customer Panel =====
+1. Edit Profile
+2. Logout
+""")
+        choice = input("Choose an option: ").strip()
+        match choice:
+            case "1":
+                edit_profile_menu(customer)
+            case "2":
+                customer.logout()
+                print("Logged out successfully")
+            case _:
+                print("Invalid option")
+
+def edit_profile_menu(customer):
+    while customer.is_logged_in:
+        print("""
+===== Profile Information =====
+""")
+        print(customer.view_profile())
+        print("""
+===== Edit Profile =====
+1. Edit Name
+2. Edit Email
+3. Change Password
+4. Back
+""")
+        choice = input("Choose an option: ").strip()
+        match choice:
+            case "1":
+                edit_name(customer)
+            case "2":
+                edit_email(customer)
+            case "3":
+                edit_password(customer)
+            case "4":
+                break
+            case _:
+                print("Invalid option")
+
+def edit_name(customer):
+    new_name = input("Enter new name: ").strip()
+    if not new_name:
+        print("Name cannot be empty")
+        return
+    if customer.update_profile(name=new_name):
+        print("Name updated successfully")
+    else:
+        print("Update failed")
+
+def edit_email(customer):
+    new_email = input("Enter new email: ").strip()
+    try:
+        if customer.update_profile(email=new_email):
+            print("Email updated successfully")
+        else:
+            print("Update failed")
+    except ValueError as error:
+        print(error)
+
+def edit_password(customer):
+    old_password = input("Enter current password: ")
+    new_password = input("Enter new password: ")
+    
+    try:
+        if customer.change_password(old_password, new_password):
+            print("Password changed successfully")
+        else:
+            print("Current password is incorrect")
+    except ValueError as error:
+        print(error)
+
+
+customer_auth_menu()
