@@ -20,7 +20,7 @@ class Customer:
         self.__username = username
         self.name = name
         self.email = email
-        self.password = password
+        self.__set_password(password)
         self.my_cards = []
         self.__is_logged_in = False
 
@@ -41,12 +41,7 @@ class Customer:
             raise ValueError("Email already exists")
         self.__email = value
 
-    @property
-    def password(self):
-        raise AttributeError("Password is write-only")
-
-    @password.setter
-    def password(self, value):
+    def __set_password(self, value):
         if not Customer.password_pattern.fullmatch(value):
             raise ValueError("Password must contain letter, digit and one of @ or &")
         self.__password = value
@@ -54,16 +49,26 @@ class Customer:
     def check_password(self, password):
         return self.__password == password
 
+    @login_required
+    def change_password(self, old_password, new_password):
+        if not self.check_password(old_password):
+            return False
+        self.__set_password(new_password)
+        return True
+
     @property
     def is_logged_in(self):
         return self.__is_logged_in
 
     def add_customer(self):
-        if Customer.find_username(self.username) is not None:
+        found_username = Customer.find_username(self.username)
+        if found_username is not None and found_username is not self:
             return False
-        if Customer.find_email(self.email) is not None:
+        found_email = Customer.find_email(self.email)
+        if found_email is not None and found_email is not self:
             return False
-        Customer.customer_list.append(self)
+        if self not in Customer.customer_list:
+            Customer.customer_list.append(self)
         return True
 
     @login_required
@@ -121,18 +126,16 @@ class Customer:
         return None
 
     @login_required
-    def update_profile(self,name=None, email=None, password=None):
+    def update_profile(self,name=None, email=None):
         if name is not None:
             self.name = name
         if email is not None:
             self.email = email
-        if password is not None:
-            self.password = password
         return True
 
-    @staticmethod
-    def validate_username(username):
-        if Customer.find_username(username):
+    @classmethod
+    def validate_username(cls, username):
+        if cls.find_username(username):
             raise ValueError("Username already exists")
 
     @classmethod
