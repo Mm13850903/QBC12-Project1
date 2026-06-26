@@ -6,7 +6,6 @@ def login_required(func):
         if not self.is_logged_in:
             return False
         return func(self, *args, **kwargs)
-
     return wrapper
 
 
@@ -182,26 +181,47 @@ def customer_auth_menu():
                 print("Invalid option")
 
 def signup_customer():
-    username = input("Enter username: ").strip()
-    name = input("Enter name: ").strip()
-    email = input("Enter email: ").strip()
-    password = input("Enter password: ")
-    
-    if not username:
-        print("Username cannot be empty")
-        return
-    if not name:
-        print("Name cannot be empty")
-        return
-    try:
+    while True:
+        print("""
+===== Sign Up =====
+1. Enter sign up information
+2. Back
+""")
 
-        customer = Customer.signup(username, name, email, password)
-        if customer is None:
-            print("Sign up failed")
-        else:
-            print("Sign up successful")
-    except ValueError as error:
-        print(error)
+        choice = input("Choose an option: ").strip()
+
+        match choice:
+            case "1":
+                username = input("Enter username: ").strip()
+                if not username:
+                    print("Username cannot be empty")
+                    continue
+                name = input("Enter name: ").strip()
+                if not name:
+                    print("Name cannot be empty")
+                    continue
+                email = input("Enter email: ").strip()
+                if not email:
+                    print("Email cannot be empty")
+                    continue
+                password = input("Enter password: ")
+                if not password:
+                    print("Password cannot be empty")
+                    continue
+                try:
+                    customer = Customer.signup(username, name, email, password)
+                    if customer is None:
+                        print("Sign up failed")
+                        continue
+                    print("Sign up successful")
+                    break
+                except ValueError as error:
+                    print(error)
+                    continue
+            case "2":
+                break
+            case _:
+                print("Invalid option")
 
 def login_customer():
     while True:
