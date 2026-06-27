@@ -40,27 +40,57 @@ def employee_validation(password, email, employees_list):
 
 def add_employee():
     while True:
-        username = input("Please enter a username for new employee, Or enter 0 to return to admin panel:")
+        username = input("Please enter a username for new employee, Or enter 0 to return to admin panel:\n")
         if username == "0":
             return
         if username in  employee_list:
-            print("This username already belonge to a crew member.Try another one")
+            print("This username already belonge to a crew member.Try another one\n")
             continue
-        password = input("Please enter a password for the new employee:")
-        first_name = input("Please enter employee's first name:")
-        last_name = input("Please enter employee's last name:")
-        email = input("Please enter employee's Email:")
+        
+        password = input("Please enter a password for the new employee:\n")
+        first_name = input("Please enter employee's first name:\n")
+        last_name = input("Please enter employee's last name:\n")
+        email = input("Please enter employee's Email:\n")
+        
         is_valid = employee_validation(password, email, employee_list)
         if is_valid == False:
-            print("Youre information isn't valid! Try again.")
+            print("Youre information isn't valid! Try again.\n")
             continue
+        
         new_employee = Employee(username, password, first_name, last_name, email)
         employee_list[username] = new_employee
-        print(f"{first_name} {last_name} is now a Quera railway employee")
+        print(f"{first_name} {last_name} is now a Quera railway employee\n")
+        
         return
 
 def remove_employee():
-    pass
+    while True:
+        username = input("Please enter a username to remove the related employee, Or enter 0 to return to admin panel:\n")
+        if username == "0":
+            return
+        if username in employee_list:
+            employee_list.pop(username)
+            print("User removed successfuly\n")
+            return
+        else:
+            print("User not found!\n")
+            continue
+
+
+
+def repr_employee():
+    while True:
+        if len(employee_list) == 0:
+            print("No one is in Quera raiway crew\n")
+            return
+        else:
+            print("List of Employees:")
+            for employee in employee_list.values():
+                print(f"username:{employee.username} , Name:{employee.first_name} {employee.last_name} , Email:{employee.email}\n")
+                
+            print("Returning to admin panlel...\n")
+            
+            return
 
 def Admin_panel():
     while True:
@@ -73,9 +103,9 @@ def Admin_panel():
             case "1":
                 add_employee()
             case "2":
-                pass
+                remove_employee()
             case "3":
-                pass
+                repr_employee()
             case "4":
                 return
 
