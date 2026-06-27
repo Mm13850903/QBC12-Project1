@@ -1,5 +1,3 @@
-class Admin:
-    pass
 class Employee:
     pass
 class Customer:
