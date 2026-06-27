@@ -62,8 +62,9 @@ def add_line(lines_list):
     destination = input("Enter Destination: ").strip()
     if destination.lower() == "exit": return
 
-    station_count = input("Enter number of stations: ").strip()
-    if station_count.lower() == "exit": return
+    station_count = get_valid_number("Enter number of stations: ")
+    if station_count == "exit":
+        return
     station_count = int(station_count)
 
     stations_names = []
@@ -144,19 +145,17 @@ def edit_line(lines_list):
 
         case "4" | "5":
             print("Updating stations information...")
-            count_input = input("Enter new number of stations: ").strip()
-            if count_input.isdigit():
-                selected_line.station_count = int(count_input)
+            count_input = get_valid_number("Enter new number of stations: ")
+            if count_input == "exit" : return
+            count_input = int(count_input)
+            selected_line.station_count = int(count_input)
                 
-                new_stations_list = []
-                for i in range(selected_line.station_count):
-                    s_name = input(f"Station {i+1} Name: ").strip()
-                    new_stations_list.append(s_name)
+            new_stations_list = []
+            for i in range(selected_line.station_count):
+                s_name = input(f"Station {i+1} Name: ").strip()                    new_stations_list.append(s_name)
                 
-                selected_line.stations = new_stations_list
-                print("Stations Updated!")
-            else:
-                print("Invalid number!")
+            selected_line.stations = new_stations_list
+            print("Stations Updated!")
 
         case "6":
             return
@@ -359,19 +358,15 @@ def edit_train(trains_list, lines_list):
                     print("Please enter a valid number.")
 
             case "4":
-                new_speed_str = input(f"Enter new speed (current: {selected_train.speed}): ").strip()
-                if new_speed_str.lower() == "exit":
+                new_speed = get_valid_number(f"Enter new speed (current: {selected_train.speed}): ")
+                if new_speed.lower() == "exit": return
+
+                if new_speed == 0:
+                    print("Speed must be greater than zero.")
                     return
-
-                if not new_speed_str:
-                    print("Speed not changed (input was empty).")
-                    continue
-
-                try:
-                    selected_train.speed = float(new_speed_str)
-                    print("Speed Updated!")
-                except ValueError as e:
-                    print(f"Error: {e}")
+                
+                selected_train.speed = new_speed
+                print("Speed Updated!")
 
             case "5":
                 new_stop_time_str = input(f"Enter new stop time (current: {selected_train.stop_time}): ").strip()
@@ -499,6 +494,7 @@ def delete_train(trains_list, lines_list):
             print(f"Train with ID '{target_id}' has been deleted successfully.")
         else:
             print(f"Error: No train found with ID '{target_id}'. Please try again.")
+            continue
 
 def display_employee_panel(current_employee):
     while True:
