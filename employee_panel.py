@@ -1,10 +1,20 @@
 from employee import Employee
 from line import Line
 from train import Train
+import re
 
 #employees_list = []
 lines_list = []
 trains_list = []
+
+def get_valid_time():
+    while True:
+        departure_time = input("Enter departure time (HH:MM): ")
+
+        if re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", departure_time):
+            return departure_time
+
+        print("Invalid time format. Please enter time as HH:MM (example: 08:30)")
 
 def get_valid_number(prompt):
     while True:
@@ -237,7 +247,7 @@ def add_train(trains_list, lines_list):
     capacity = get_valid_number("Enter Capacity: ")
     if capacity == "exit" : return
 
-    departure_time = get_valid_number("Enter Departure Time: ")
+    departure_time = get_valid_time("Enter Departure Time: ")
     if departure_time == "exit": return
 
     distance = get_valid_number("Enter Distance to Station: ")
@@ -430,7 +440,7 @@ def edit_train(trains_list, lines_list):
                     print(f"Error: {e}")
 
             case "9":
-                new_departure_time = get_valid_number("Enter new departure time: ")
+                new_departure_time = get_valid_time("Enter new departure time: ")
                 if new_departure_time == "exit":
                     continue
 
@@ -439,12 +449,12 @@ def edit_train(trains_list, lines_list):
 
                 collision_found = False
                 for other_train in trains_list:
-                    if other_train != selected_train and train.has_collision(other_train):
+                    if other_train != selected_train and selected_train.has_collision(other_train):
                         collision_found = True
                         break
 
                 if collision_found:
-                    train.departure_time = old_departure_time
+                    selected_train.departure_time = old_departure_time
                     print("This change causes a collision! Update cancelled.")
                 else:
                     print("Departure time updated.")
@@ -459,12 +469,12 @@ def edit_train(trains_list, lines_list):
 
                 collision_found = False
                 for other_train in trains_list:
-                    if other_train != selected_train and train.has_collision(other_train):
+                    if other_train != selected_train and selected_train.has_collision(other_train):
                         collision_found = True
                         break
 
                 if collision_found:
-                    train.distance = old_distance
+                    selected_train.distance = old_distance
                     print("This change causes a collision! Update cancelled.")
                 else:
                     print("Distance updated successfully.")
@@ -476,7 +486,7 @@ def edit_train(trains_list, lines_list):
             case _:
                 print("Invalid choice. Please try again.")
 
-def delete_train(trains_list, lines_list):
+def delete_train(trains_list):
     print("--- Delete Train (Type 'exit' to cancel) ---")
 
     if not trains_list:
