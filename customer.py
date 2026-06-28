@@ -1,11 +1,14 @@
 import re
 
+from card import Card
+
 
 def login_required(func):
     def wrapper(self, *args, **kwargs):
         if not self.is_logged_in:
             return False
         return func(self, *args, **kwargs)
+
     return wrapper
 
 
@@ -22,6 +25,8 @@ class Customer:
         self.__set_password(password)
         self.my_cards = []
         self.__is_logged_in = False
+        self.__my_wallet = 0
+        self.current_card = None
 
     @property
     def username(self):
@@ -59,6 +64,20 @@ class Customer:
     def is_logged_in(self):
         return self.__is_logged_in
 
+    @property
+    def my_wallet(self):
+        return self.__my_wallet
+
+    @my_wallet.setter
+    def my_wallet(self, value):
+        self.__my_wallet += value
+
+    def buy_ticket(self, ticket_price):
+        if self.my_wallet < ticket_price:
+            return False
+        self.my_wallet -= ticket_price
+        return True
+
     def add_customer(self):
         found_username = Customer.find_username(self.username)
         if found_username is not None and found_username is not self:
@@ -75,8 +94,18 @@ class Customer:
         found_card = self.find_card(card.card_id)
         if found_card is not None:
             return False
+        if not (isinstance(card, Card)):
+            return False
         self.my_cards.append(card)
         return True
+
+    def own_card(self, card_id):
+        for card in self.my_cards:
+            if card.card_id == card_id:
+                self.current_card = card
+                return True
+        self.current_card = None
+        return False
 
     @classmethod
     def find_username(cls, username):
@@ -180,6 +209,7 @@ def customer_auth_menu():
             case _:
                 print("Invalid option")
 
+
 def signup_customer():
     while True:
         print("""
@@ -223,6 +253,7 @@ def signup_customer():
             case _:
                 print("Invalid option")
 
+
 def login_customer():
     while True:
         print("""
@@ -257,6 +288,7 @@ def login_customer():
             case _:
                 print("Invalid option")
 
+
 def customer_panel(customer):
     while customer.is_logged_in:
         print("""
@@ -273,6 +305,7 @@ def customer_panel(customer):
                 print("Logged out successfully")
             case _:
                 print("Invalid option")
+
 
 def edit_profile_menu(customer):
     while customer.is_logged_in:
@@ -300,6 +333,7 @@ def edit_profile_menu(customer):
             case _:
                 print("Invalid option")
 
+
 def edit_name(customer):
     while True:
         new_name = input("Enter new name or 0 to back: ").strip()
@@ -317,6 +351,7 @@ def edit_name(customer):
         else:
             print("Update failed")
             return
+
 
 def edit_email(customer):
     while True:
@@ -339,6 +374,7 @@ def edit_email(customer):
         except ValueError as error:
             print(error)
             continue
+
 
 def edit_password(customer):
     while True:
