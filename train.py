@@ -141,6 +141,9 @@ class Train:
         if self.line_name != other_train.line_name:
             return False
 
+        if self.speed == 0 or other_train.speed == 0:
+            return False
+
         self_start = self.time_to_minutes(self.departure_time)
         other_start = self.time_to_minutes(other_train.departure_time)
 
