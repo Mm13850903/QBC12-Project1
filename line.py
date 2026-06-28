@@ -33,7 +33,3 @@ class Line:
 
 
 
-my_line= Line(1,"tehran","shiraz",3,['a','b','c'])
-
-my_line.__source = "tehran"
-my_line.__destination = "shiraz"
