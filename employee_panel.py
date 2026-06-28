@@ -102,7 +102,8 @@ def add_line(lines_list):
                 if s_name.lower() == "exit":
                     return
                 if s_name == "":
-                    print("Error: Station name cannot be empty. Please try again.")
+                    print("Error: Station name cannot be empty.")
+                    print("Please try again.")
                 else:
                     stations_names.append(s_name)
                     break
