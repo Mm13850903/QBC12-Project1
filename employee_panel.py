@@ -61,39 +61,61 @@ def login_employee(employees_list: list[Employee]):
 
 def add_line(lines_list):
     print("--- Add New Line (Type 'exit' to cancel) ---")
-
     count = 0
-    remaining = 3 - count
     while count < 3:
-        name =  input("Enter Line Name").strip()
-        if name.lower == "exit" : return
+        name = input("Enter Line Name: ").strip()
+        if name.lower() == "exit":
+            return
 
-        if not name:
+        if name == "":
             count += 1
             print("Error: Line name cannot be empty")
-            print(f"{remaining} attempts left")
-            print("please try again")
+            print(f"{3 - count} attempts left.")
+            print("Please try again")
             continue
 
-        is_duplicate = False
-        for line in lines_list:
-            if line.name == name:
-                is_duplicate = True
-                break
 
-        if is_duplicate:
-            count +=1
-            print("Error: Line '{name}' already exists")
-            print(f"{remaining} attempts left")
-            print("please Try again")
-        else:
-            print("Add Line successfully")
-            break
-    else:
-        print("Error: Your account has been temporarily blocked due to 3 failed attempts")
-        print("Returning to previous menu")
+        if any(line.get_name().lower() == name.lower() for line in lines_list):
+            count += 1
+            print(f"Error: Line '{name}' already exists")
+            print(f"{3 - count} attempts left.")
+            print("Please try again")
+            continue
+
+        source = input("Enter Source: ").strip()
+        if source.lower() == "exit": return
+
+        destination = input("Enter Destination: ").strip()
+        if destination.lower() == "exit": return
+
+        station_count = get_valid_number("Enter number of stations: ")
+        if station_count == "exit":
+            return
+
+        station_count = int(station_count)
+        stations_names = []
+
+        print(f"Please enter the names of {station_count} stations:")
+        for i in range(station_count):
+            while True:
+                s_name = input(f"Station {i + 1} Name: ").strip()
+                if s_name.lower() == "exit":
+                    return
+                if s_name == "":
+                    print("Error: Station name cannot be empty. Please try again.")
+                else:
+                    stations_names.append(s_name)
+                    break
+
+        new_line = Line(name, source, destination, station_count, stations_names)
+        lines_list.append(new_line)
+
+        print(f"Line '{name}' created successfully with {station_count} stations!")
         return
 
+    print("Error: Your account has been temporarily blocked due to 3 failed attempts")
+    print("Returning to previous menu")
+    return
 
 def edit_line(lines_list):
     print("--- Edit Line (Type 'exit' to cancel) ---")
