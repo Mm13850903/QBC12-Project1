@@ -575,3 +575,23 @@ def display_employee_panel(current_employee):
             case _:
                 print("Invalid choice. Please enter a number between 1 and 9.")
                 input("Press Enter to continue...")
+
+def get_all_trains_info(trains_list):
+    trains_data = []
+
+    for train in trains_list:
+        train_dict = {
+            "train_id": train.train_id,
+            "name": train.name,
+            "line_name": train.line_name,
+            "speed": train.speed,
+            "stop_time": train.stop_time,
+            "quality": train.quality,
+            "price": train.price,
+            "capacity": train.capacity,
+            "departure_time": train.departure_time,
+            "distance": train.distance,
+        }
+        trains_data.append(train_dict)
+
+    return trains_data
