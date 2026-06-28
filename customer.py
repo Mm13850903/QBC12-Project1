@@ -26,7 +26,6 @@ class Customer:
         self.my_cards = []
         self.__is_logged_in = False
         self.__my_wallet = 0
-        self.current_card = None
 
     @property
     def username(self):
@@ -110,14 +109,6 @@ class Customer:
         if self not in Customer.customer_list:
             Customer.customer_list.append(self)
         return True
-
-    def own_card(self, card_id):
-        for card in self.my_cards:
-            if card.card_id == card_id:
-                self.current_card = card
-                return True
-        self.current_card = None
-        return False
 
     @classmethod
     def find_username(cls, username):
