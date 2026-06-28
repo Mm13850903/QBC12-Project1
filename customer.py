@@ -1,6 +1,7 @@
 import re
 
 from card import Card
+from BANK import API
 
 
 def login_required(func):
@@ -8,7 +9,6 @@ def login_required(func):
         if not self.is_logged_in:
             return False
         return func(self, *args, **kwargs)
-
     return wrapper
 
 
@@ -68,14 +68,36 @@ class Customer:
     def my_wallet(self):
         return self.__my_wallet
 
-    @my_wallet.setter
-    def my_wallet(self, value):
+    @login_required
+    def charge_wallet(self, card_id, exp_month, exp_year, password, cvv2, value):
+        return self.__charge_wallet(card_id, exp_month, exp_year, password, cvv2, value)
+
+    def __charge_wallet(self, card_id, exp_month, exp_year, password, cvv2, value):
+        if not API.validate(card_id, exp_month, exp_year, password, cvv2):
+            return False
+        card = Card.find_card(card_id)
+        if card is None:
+            return False
+        if not card.check_password(password):
+            return False
+        if not card.check_cvv2(cvv2):
+            return False
+        if not card.check_exp_month(exp_month):
+            return False
+        if not card.check_exp_year(exp_year):
+            return False
+        if not card.withdraw(value):
+            return False
+        payment_id = API.generate_payment_id(card_id, value)
         self.__my_wallet += value
+        if card not in self.my_cards:
+            self.my_cards.append(card)
+        return payment_id
 
     def buy_ticket(self, ticket_price):
         if self.my_wallet < ticket_price:
             return False
-        self.my_wallet -= ticket_price
+        self.__my_wallet -= ticket_price
         return True
 
     def add_customer(self):
@@ -87,16 +109,6 @@ class Customer:
             return False
         if self not in Customer.customer_list:
             Customer.customer_list.append(self)
-        return True
-
-    @login_required
-    def add_card(self, card):
-        found_card = self.find_card(card.card_id)
-        if found_card is not None:
-            return False
-        if not (isinstance(card, Card)):
-            return False
-        self.my_cards.append(card)
         return True
 
     def own_card(self, card_id):
