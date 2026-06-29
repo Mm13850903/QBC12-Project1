@@ -14,13 +14,13 @@ def print_separator():
 lines_list = []
 trains_list = []
 
-def get_valid_time():
+def get_valid_time(prompt="Enter departure time (HH:MM): "):
     while True:
-        departure_time = input("Enter departure time (HH:MM): ")
-
+        departure_time = input(prompt).strip()
+        if departure_time.lower() == "exit":
+            return "exit"
         if re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", departure_time):
             return departure_time
-
         print("Invalid time format. Please enter time as HH:MM (example: 08:30)")
 
 def get_valid_number(prompt):
@@ -378,7 +378,7 @@ def add_train(trains_list, lines_list):
 
     print("Available Lines:")
     for i, line in enumerate(lines_list, 1):
-        print(f"{i}. {line.line_name}")
+        print(f"{i}. {line.name}")
 
     count = 0
     while count < 3:
@@ -454,8 +454,24 @@ def add_train(trains_list, lines_list):
     distance = get_valid_number("Enter Distance to Station: ")
     if distance == "exit": return
 
-    new_train = Train(train_id, name, selected_line.line_name, speed, stop_time, quality, price, capacity,
-                      departure_time, distance)
+    try:
+        new_train = Train(
+            train_id,
+            name,
+            selected_line.name,
+            speed,
+            stop_time,
+            quality,
+            price,
+            capacity,
+            departure_time,
+            distance
+        )
+
+    except ValueError as error:
+        print(error)
+        print("Train creation failed. Returning to previous menu.")
+        return
 
     collision_found = False
     for train in trains_list:
@@ -643,9 +659,16 @@ def edit_train(trains_list, lines_list):
                         print(f"{remaining} attempts left.")
                         print("Please try again.")
                     else:
-                        selected_train.speed = new_speed
-                        print("Speed Updated successfully!")
-                        break
+                        try:
+                            selected_train.speed = new_speed
+                            print("Speed Updated successfully!")
+                            break
+                        except ValueError as error:
+                            count += 1
+                            remaining = 3 - count
+                            print(error)
+                            print(f"{remaining} attempts left.")
+                            print("Please try again.")
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
                     return
@@ -929,6 +952,8 @@ def get_all_trains_info(trains_list):
             "quality": train.quality,
             "price": train.price,
             "capacity": train.capacity,
+            "booked_seats": train.booked_seats,
+            "available_seats": train.capacity - train.booked_seats,
             "departure_time": train.departure_time,
             "distance": train.distance,
         }

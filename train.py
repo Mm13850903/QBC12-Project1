@@ -8,6 +8,7 @@ class Train:
         self.quality = quality
         self.price = price
         self.capacity = capacity
+        self.booked_seats = 0
         self.departure_time = departure_time
         self.distance = distance
 
@@ -15,12 +16,11 @@ class Train:
     def time_to_minutes(time_str):
         hours, minutes = map(int, time_str.split(":"))
         return hours * 60 + minutes
-    
+
     @staticmethod
     def validate_non_negative(value, field_name):
         if value < 0:
-            print(f"{field_name} cannot be negative.")
-            return False
+            raise ValueError(f"{field_name} cannot be negative.")
         return True
 
     @property
@@ -62,8 +62,7 @@ class Train:
 
     @speed.setter
     def speed(self, value):
-        if not self.validate_non_negative(value, "Speed"):
-            return
+        self.validate_non_negative(value, "Speed")
         self.__speed = value
 
     @property
@@ -72,8 +71,7 @@ class Train:
 
     @stop_time.setter
     def stop_time(self, value):
-        if not self.validate_non_negative(value, "Stop time"):
-            return
+        self.validate_non_negative(value, "Stop time")
         self.__stop_time = value
 
     @property
@@ -93,8 +91,7 @@ class Train:
 
     @price.setter
     def price(self, value):
-        if not self.validate_non_negative(value, "Price"):
-            return
+        self.validate_non_negative(value, "Price")
         self.__price = value
 
     @property
@@ -103,8 +100,7 @@ class Train:
 
     @capacity.setter
     def capacity(self, value):
-        if not self.validate_non_negative(value, "Capacity"):
-            return
+        self.validate_non_negative(value, "Capacity")
         self.__capacity = value
 
     @property
@@ -121,8 +117,7 @@ class Train:
 
     @distance.setter
     def distance(self, value):
-        if not self.validate_non_negative(value, "Distance"):
-            return
+        self.validate_non_negative(value, "Distance")
         self.__distance = value
 
     def show_information(self):
@@ -134,6 +129,8 @@ class Train:
         print(f"Quality: {self.quality}")
         print(f"Price: {self.price}")
         print(f"Capacity: {self.capacity}")
+        print(f"Booked Seats: {self.booked_seats}")
+        print(f"Available seats:{self.capacity - self.booked_seats}")
         print(f"Departure Time: {self.departure_time}")
         print(f"Distance: {self.distance}")
 
@@ -154,9 +151,17 @@ class Train:
         other_departure = other_arrival + other_train.stop_time
 
         return not (self_departure <= other_arrival or self_arrival >= other_departure)
-    
+
     def __str__(self):
         return (f"Train ID: {self.train_id}, Name: {self.name}, Line: {self.line_name}, "
                 f"Speed: {self.speed}, Stop Time: {self.stop_time}, Quality: {self.quality}, "
                 f"Price: {self.price}, Capacity: {self.capacity}, Departure Time: {self.departure_time}, "
-                f"Distance: {self.distance}")
+                f"Distance: {self.distance}, Booked Seats: {self.booked_seats} available seats:{self.capacity - self.booked_seats}")
+
+
+    def get_a_passenger(self):
+        available_seats = self.capacity - self.booked_seats
+        if not available_seats > 0:
+            return False
+        self.booked_seats +=1
+        return True
