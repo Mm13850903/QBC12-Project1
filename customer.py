@@ -250,16 +250,24 @@ class Customer:
     def view_transactions(self):
         if not self.transactions:
             return "No transactions found"
+
         result = "===== Transactions =====\n"
+        result += f"Username: {self.username}\n"
+        result += f"Name: {self.name}\n"
+        result += f"Current Wallet Balance: {self.my_wallet}\n"
+        result += "=" * 35 + "\n"
+
         for index, transaction in enumerate(self.transactions, start=1):
             result += f"""
     Transaction {index}
+    Username: {self.username}
     Type: {transaction["type"]}
     Amount: {transaction["amount"]}
     Description: {transaction["description"]}
     Payment ID: {transaction["payment_id"]}
     Wallet Balance: {transaction["wallet_balance"]}
     """
+
         return result
 
 
@@ -286,15 +294,19 @@ def export_trains_to_txt(trains):
 def export_transactions_to_txt(customer):
     if not customer.transactions:
         return False
+
     file_name = f"{customer.username}_transactions.txt"
+
     with open(file_name, "w", encoding="utf-8") as file:
         file.write("===== Customer Transactions =====\n\n")
         file.write(f"Username: {customer.username}\n")
         file.write(f"Name: {customer.name}\n")
         file.write(f"Current Wallet Balance: {customer.my_wallet}\n")
         file.write("=" * 40 + "\n\n")
+
         for index, transaction in enumerate(customer.transactions, start=1):
             file.write(f"Transaction {index}\n")
+            file.write(f"Username: {customer.username}\n")
             file.write(f"Type: {transaction['type']}\n")
             file.write(f"Amount: {transaction['amount']}\n")
             file.write(f"Description: {transaction['description']}\n")
