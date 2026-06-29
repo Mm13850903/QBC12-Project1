@@ -16,8 +16,8 @@ def login_required(func):
 
 
 class Customer:
-    email_pattern = re.compile(r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
-    password_pattern = re.compile(r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[@&]).+$')
+    email_pattern = re.compile(r'^[a-zA-Z0-9._]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$')
+    password_pattern = re.compile(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[&@])[a-zA-Z0-9&@]{8,}$')
     customer_list = []
 
     def __init__(self, username, name, email, password):
