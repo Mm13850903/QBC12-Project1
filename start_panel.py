@@ -119,7 +119,7 @@ def Admin_panel():
                 return
 
 def Admin_login():
-    admin_essentials = ("Username", "NotPaidEnough")
+    admin_essentials = ("YESIMFUNNY", "NotPaidEnough")
     count = 0
     while True:
         print("===== Login =====")
