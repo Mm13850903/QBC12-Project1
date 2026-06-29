@@ -2,6 +2,8 @@ import re
 
 from card import Card
 from BANK import API
+from train import Train
+from employee_panel import get_all_trains_info, trains_list
 
 
 def login_required(func):
@@ -27,6 +29,7 @@ class Customer:
         self.my_cards = []
         self.__is_logged_in = False
         self.__my_wallet = 0
+        self.transactions = []
 
     @property
     def username(self):
@@ -85,6 +88,12 @@ class Customer:
             return False
         payment_id = API.generate_payment_id(card.card_id, value)
         self.__my_wallet += value
+        self.add_transaction(
+            transaction_type="wallet_charge",
+            amount=value,
+            description="Wallet charged with saved card",
+            payment_id=payment_id
+        )
         return payment_id
 
     def __charge_wallet(self, card_id, exp_month, exp_year, password, cvv2, value):
@@ -107,17 +116,33 @@ class Customer:
             return False
         payment_id = API.generate_payment_id(card_id, value)
         self.__my_wallet += value
+        self.add_transaction(
+            transaction_type="wallet_charge",
+            amount=value,
+            description="Wallet charged with new card",
+            payment_id=payment_id
+        )
         if card not in self.my_cards:
             self.my_cards.append(card)
         return payment_id
 
     @login_required
-    def buy_ticket(self, ticket_price):
-        if ticket_price < 0:
+    def buy_ticket(self, train):
+        if train is None:
+            return False
+        ticket_price = train.price
+        if ticket_price <= 0:
             return False
         if self.my_wallet < ticket_price:
             return False
+        if not train.get_a_passenger():
+            return "full"
         self.__my_wallet -= ticket_price
+        self.add_transaction(
+            transaction_type="ticket_purchase",
+            amount=ticket_price,
+            description=f"Ticket purchased for train {train.train_id}"
+        )
         return True
 
     def add_customer(self):
@@ -209,6 +234,145 @@ class Customer:
     @login_required
     def view_profile(self):
         return str(self)
+
+    def add_transaction(self, transaction_type, amount, description, payment_id=None):
+        transaction = {
+            "type": transaction_type,
+            "amount": amount,
+            "description": description,
+            "payment_id": payment_id,
+            "wallet_balance": self.my_wallet
+        }
+        self.transactions.append(transaction)
+        return transaction
+
+    @login_required
+    def view_transactions(self):
+        if not self.transactions:
+            return "No transactions found"
+        result = "===== Transactions =====\n"
+        for index, transaction in enumerate(self.transactions, start=1):
+            result += f"""
+    Transaction {index}
+    Type: {transaction["type"]}
+    Amount: {transaction["amount"]}
+    Description: {transaction["description"]}
+    Payment ID: {transaction["payment_id"]}
+    Wallet Balance: {transaction["wallet_balance"]}
+    """
+        return result
+
+
+def export_trains_to_txt(trains):
+    if not trains:
+        return False
+    with open("trains_list.txt", "w", encoding="utf-8") as file:
+        file.write("===== Trains List =====\n\n")
+        for index, train in enumerate(trains, start=1):
+            available_seats = train.capacity - train.booked_seats
+            file.write(f"----- Train {index} -----\n")
+            file.write(f"Ticket ID: {train.train_id}\n")
+            file.write(f"Name: {train.name}\n")
+            file.write(f"Line: {train.line_name}\n")
+            file.write(f"Departure Time: {train.departure_time}\n")
+            file.write(f"Price: {train.price}\n")
+            file.write(f"Capacity: {train.capacity}\n")
+            file.write(f"Booked Seats: {train.booked_seats}\n")
+            file.write(f"Available Seats: {available_seats}\n")
+            file.write("-" * 30 + "\n\n")
+    return True
+
+
+def export_transactions_to_txt(customer):
+    if not customer.transactions:
+        return False
+    file_name = f"{customer.username}_transactions.txt"
+    with open(file_name, "w", encoding="utf-8") as file:
+        file.write("===== Customer Transactions =====\n\n")
+        file.write(f"Username: {customer.username}\n")
+        file.write(f"Name: {customer.name}\n")
+        file.write(f"Current Wallet Balance: {customer.my_wallet}\n")
+        file.write("=" * 40 + "\n\n")
+        for index, transaction in enumerate(customer.transactions, start=1):
+            file.write(f"Transaction {index}\n")
+            file.write(f"Type: {transaction['type']}\n")
+            file.write(f"Amount: {transaction['amount']}\n")
+            file.write(f"Description: {transaction['description']}\n")
+            file.write(f"Payment ID: {transaction['payment_id']}\n")
+            file.write(f"Wallet Balance: {transaction['wallet_balance']}\n")
+            file.write("-" * 30 + "\n\n")
+
+    return file_name
+
+
+def export_ticket_to_txt(customer, train):
+    file_name = f"ticket_{customer.username}_{train.train_id}.txt"
+    with open(file_name, "w", encoding="utf-8") as file:
+        file.write("===== Train Ticket =====\n\n")
+        file.write(f"Passenger Username: {customer.username}\n")
+        file.write(f"Passenger Name: {customer.name}\n")
+        file.write("-" * 30 + "\n")
+        file.write(f"Ticket ID: {train.train_id}\n")
+        file.write(f"Train Name: {train.name}\n")
+        file.write(f"Line: {train.line_name}\n")
+        file.write(f"Departure Time: {train.departure_time}\n")
+        file.write(f"Ticket Price: {train.price}\n")
+        file.write("-" * 30 + "\n")
+        file.write(f"Remaining Wallet Balance: {customer.my_wallet}\n")
+        file.write(f"Available Seats After Purchase: {train.capacity - train.booked_seats}\n")
+
+    return file_name
+
+
+def transactions_menu(customer):
+    while True:
+        print("""
+===== Transactions Menu =====
+1. View Transactions
+2. Export Transactions To TXT
+3. Back
+""")
+
+        choice = input("Choose an option: ").strip()
+        match choice:
+            case "1":
+                print(customer.view_transactions())
+            case "2":
+                file_name = export_transactions_to_txt(customer)
+                if file_name:
+                    print(f"Transactions exported successfully to {file_name}")
+                else:
+                    print("No transactions found")
+            case "3":
+                break
+            case _:
+                print("Invalid option")
+
+
+def main_menu():
+    while True:
+        print("""
+===== Main Menu =====
+1. Customer Menu
+2. Card Management
+3. Exit
+""")
+
+        choice = input("Choose an option: ").strip()
+
+        match choice:
+            case "1":
+                customer_auth_menu()
+
+            case "2":
+                card_management_menu()
+
+            case "3":
+                print("Goodbye")
+                break
+
+            case _:
+                print("Invalid option")
 
 
 def customer_auth_menu():
@@ -360,7 +524,8 @@ def customer_panel(customer):
 3. Wallet
 4. My Cards
 5. Buy Ticket
-6. Logout
+6. Transactions
+7. Logout
 """)
 
         choice = input("Choose an option: ").strip()
@@ -371,23 +536,19 @@ def customer_panel(customer):
 ===== Profile Information =====
 """)
                 print(customer.view_profile())
-
             case "2":
                 edit_profile_menu(customer)
-
             case "3":
                 wallet_menu(customer)
-
             case "4":
                 my_cards_menu(customer)
-
             case "5":
                 buy_ticket_menu(customer)
-
             case "6":
+                print(customer.view_transactions())
+            case "7":
                 customer.logout()
                 print("Logged out successfully")
-
             case _:
                 print("Invalid option")
 
@@ -594,9 +755,11 @@ def charge_wallet_with_new_card(customer):
             continue
 
         try:
+            exp_month = int(exp_month)
+            exp_year = int(exp_year)
             value = int(value)
         except ValueError:
-            print("Amount must be a number")
+            print("Exp month, exp year and amount must be numbers")
             continue
 
         if value <= 0:
@@ -771,42 +934,255 @@ def buy_ticket_menu(customer):
 Current Wallet Balance: {customer.my_wallet}
 """)
 
-        ticket_price = input("Enter ticket price or 0 to back: ").strip()
-
-        if ticket_price == "0":
-            print("Buy ticket cancelled")
+        if not trains_list:
+            print("No trains available")
             return
 
-        if not ticket_price:
-            print("Ticket price cannot be empty")
+        print("===== Available Trains =====")
+
+        for index, train in enumerate(trains_list, start=1):
+            available_seats = train.capacity - train.booked_seats
+
+            print(f"""
+----- Train {index} -----
+Ticket ID: {train.train_id}
+Name: {train.name}
+Line: {train.line_name}
+Departure Time: {train.departure_time}
+Price: {train.price}
+Capacity: {train.capacity}
+Booked Seats: {train.booked_seats}
+Available Seats: {available_seats}
+""")
+
+        print("""
+1. Buy Ticket
+2. Export Trains List To TXT
+3. Back
+""")
+
+        choice = input("Choose an option: ").strip()
+
+        match choice:
+            case "1":
+                ticket_id = input("Enter ticket id or 0 to back: ").strip()
+                if ticket_id == "0":
+                    print("Buy ticket cancelled")
+                    continue
+                if not ticket_id:
+                    print("Ticket ID cannot be empty")
+                    continue
+                selected_train = None
+                for train in trains_list:
+                    if str(train.train_id) == str(ticket_id):
+                        selected_train = train
+                        break
+                if selected_train is None:
+                    print("Train not found")
+                    continue
+                available_seats = selected_train.capacity - selected_train.booked_seats
+                if available_seats <= 0:
+                    print("Train capacity is full")
+                    continue
+                if customer.my_wallet < selected_train.price:
+                    print("Not enough wallet balance")
+                    print("Please charge your wallet")
+                    continue
+                result = customer.buy_ticket(selected_train)
+                if result == "full":
+                    print("Train capacity is full")
+                    continue
+                if result:
+                    print("Ticket purchased successfully")
+                    print(f"Train ID: {selected_train.train_id}")
+                    print(f"Train Name: {selected_train.name}")
+                    print(f"Remaining Balance: {customer.my_wallet}")
+                    print(f"Available Seats: {selected_train.capacity - selected_train.booked_seats}")
+                    export_choice = input("Do you want to export this ticket to TXT? (y/n): ").strip().lower()
+                    if export_choice == "y":
+                        file_name = export_ticket_to_txt(customer, selected_train)
+                        print(f"Ticket exported successfully to {file_name}")
+                    return
+                print("Ticket purchase failed")
+            case "2":
+                if export_trains_to_txt(trains_list):
+                    print("Trains list exported successfully to trains_list.txt")
+                else:
+                    print("No trains available")
+            case "3":
+                return
+
+            case _:
+                print("Invalid option")
+
+
+def card_management_menu():
+    while True:
+        print("""
+===== Card Management =====
+1. Create Card
+2. Deposit To Card
+3. View All Cards
+4. Back
+""")
+
+        choice = input("Choose an option: ").strip()
+
+        match choice:
+            case "1":
+                create_card_menu()
+
+            case "2":
+                deposit_to_card_menu()
+
+            case "3":
+                view_all_cards()
+
+            case "4":
+                break
+
+            case _:
+                print("Invalid option")
+
+
+def create_card_menu():
+    while True:
+        print("""
+===== Create Card =====
+""")
+
+        name = input("Enter card holder name or 0 to back: ").strip()
+        if name == "0":
+            print("Create card cancelled")
+            return
+        if not name:
+            print("Name cannot be empty")
+            continue
+
+        exp_month = input("Enter exp month or 0 to back: ").strip()
+        if exp_month == "0":
+            print("Create card cancelled")
+            return
+        if not exp_month:
+            print("Exp month cannot be empty")
+            continue
+
+        exp_year = input("Enter exp year or 0 to back: ").strip()
+        if exp_year == "0":
+            print("Create card cancelled")
+            return
+        if not exp_year:
+            print("Exp year cannot be empty")
+            continue
+
+        password = input("Enter card password or 0 to back: ")
+        if password == "0":
+            print("Create card cancelled")
+            return
+        if not password:
+            print("Card password cannot be empty")
+            continue
+
+        balance = input("Enter initial balance or 0 to back: ").strip()
+        if balance == "0":
+            print("Create card cancelled")
+            return
+        if not balance:
+            print("Initial balance cannot be empty")
             continue
 
         try:
-            ticket_price = int(ticket_price)
+            balance = int(balance)
         except ValueError:
-            print("Ticket price must be a number")
+            print("Initial balance must be a number")
             continue
 
-        if ticket_price <= 0:
-            print("Ticket price must be greater than 0")
+        if balance < 0:
+            print("Initial balance cannot be negative")
             continue
 
-        if customer.buy_ticket(ticket_price):
-            print("Ticket purchased successfully")
-            print(f"Remaining Balance: {customer.my_wallet}")
+        try:
+            card = Card.create_card(name, exp_month, exp_year, password, balance)
+            print("Card created successfully")
+            print()
+            print(card)
             return
 
-        print("Not enough wallet balance")
-        print("Please charge your wallet")
+        except ValueError as error:
+            print(error)
+            continue
+
+
+def deposit_to_card_menu():
+    while True:
+        print("""
+===== Deposit To Card =====
+""")
+
+        if not Card.card_list:
+            print("No cards found")
+            return
+
+        view_all_cards()
+
+        card_id = input("Enter card id or 0 to back: ").strip()
+        if card_id == "0":
+            print("Deposit cancelled")
+            return
+        if not card_id:
+            print("Card id cannot be empty")
+            continue
+
+        card = Card.find_card(card_id)
+
+        if card is None:
+            print("Card not found")
+            continue
+
+        amount = input("Enter amount or 0 to back: ").strip()
+        if amount == "0":
+            print("Deposit cancelled")
+            return
+        if not amount:
+            print("Amount cannot be empty")
+            continue
+
+        try:
+            amount = int(amount)
+        except ValueError:
+            print("Amount must be a number")
+            continue
+
+        if amount <= 0:
+            print("Amount must be greater than 0")
+            continue
+
+        if card.deposit(amount):
+            print("Deposit successful")
+            print(f"New Card Balance: {card.balance}")
+            return
+
+        print("Deposit failed")
+
+
+def view_all_cards():
+    print("""
+===== All Cards =====
+""")
+
+    if not Card.card_list:
+        print("No cards found")
+        return
+
+    for index, card in enumerate(Card.card_list, start=1):
+        print(f"----- Card {index} -----")
+        print(card)
+        print()
 
 
 def mask_card_id(card_id):
     card_id = str(card_id)
-
-    if len(card_id) <= 4:
-        return card_id
-
     return "*" * (len(card_id) - 4) + card_id[-4:]
 
 
-customer_auth_menu()
+main_menu()
