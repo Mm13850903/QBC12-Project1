@@ -102,6 +102,7 @@ def add_line(lines_list):
             if destination.lower() == "exit":
                 return
             print("Error: Destination cannot be the same as Source.")
+            print("If your source and destination are the same, don't you feel like it's better to travel with Snap ?")
             destination = input("Please enter a different destination: ")
 
         station_count = get_valid_number("Enter number of stations: ")
