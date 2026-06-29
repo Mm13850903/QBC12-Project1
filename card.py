@@ -19,6 +19,11 @@ class Card:
         self.__balance = balance
         Card.card_list.append(self)
 
+    @classmethod
+    def create_card(cls, name, exp_month, exp_year, password, balance=0):
+        card = cls(name, exp_month, exp_year, password, balance)
+        return card
+
     def __set_password(self, value):
         value = str(value)
         if not (len(value) == 6 and value.isdigit()):
@@ -27,6 +32,18 @@ class Card:
 
     def check_password(self, password):
         return self.__password == str(password)
+
+    @property
+    def cvv2(self):
+        return self.__cvv2
+
+    @property
+    def exp_month(self):
+        return self.__exp_month
+
+    @property
+    def exp_year(self):
+        return self.__exp_year
 
     def check_cvv2(self, cvv2):
         return self.__cvv2 == str(cvv2)
@@ -111,5 +128,8 @@ class Card:
         return (
             f"Card ID: {self.card_id}\n"
             f"Name: {self.name}\n"
-            f"Balance: {self.__balance}"
+            f"Exp Month: {self.exp_month}\n"
+            f"Exp Year: {self.exp_year}\n"
+            f"CVV2: {self.cvv2}\n"
+            f"Balance: {self.balance}"
         )
