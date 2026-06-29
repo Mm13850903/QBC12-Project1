@@ -91,7 +91,7 @@ def add_line(lines_list):
         if destination.lower() == "exit": return
 
         while  destination.lower() == source.lower():
-            print("Error: Destination cannot be the same as Source. Please enter a different destination.")
+            print("Error: Destination cannot be the same as Source.")
             print("Please enter a different destination")
             if destination.lower() == "exit": return
         
