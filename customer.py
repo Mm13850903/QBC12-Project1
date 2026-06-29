@@ -1,5 +1,5 @@
 import re
-
+from datetime import datetime
 from card import Card
 from BANK import API
 from train import Train
@@ -237,11 +237,13 @@ class Customer:
 
     def add_transaction(self, transaction_type, amount, description, payment_id=None):
         transaction = {
+            "username": self.username,
             "type": transaction_type,
             "amount": amount,
             "description": description,
             "payment_id": payment_id,
-            "wallet_balance": self.my_wallet
+            "wallet_balance": self.my_wallet,
+            "date_time": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         }
         self.transactions.append(transaction)
         return transaction
@@ -260,7 +262,8 @@ class Customer:
         for index, transaction in enumerate(self.transactions, start=1):
             result += f"""
     Transaction {index}
-    Username: {self.username}
+    Username: {transaction["username"]}
+    Date Time: {transaction["date_time"]}
     Type: {transaction["type"]}
     Amount: {transaction["amount"]}
     Description: {transaction["description"]}
@@ -306,7 +309,8 @@ def export_transactions_to_txt(customer):
 
         for index, transaction in enumerate(customer.transactions, start=1):
             file.write(f"Transaction {index}\n")
-            file.write(f"Username: {customer.username}\n")
+            file.write(f"Username: {transaction['username']}\n")
+            file.write(f"Date Time: {transaction['date_time']}\n")
             file.write(f"Type: {transaction['type']}\n")
             file.write(f"Amount: {transaction['amount']}\n")
             file.write(f"Description: {transaction['description']}\n")
@@ -359,7 +363,6 @@ def transactions_menu(customer):
                 break
             case _:
                 print("Invalid option")
-
 
 def main_menu():
     while True:
@@ -557,7 +560,7 @@ def customer_panel(customer):
             case "5":
                 buy_ticket_menu(customer)
             case "6":
-                print(customer.view_transactions())
+                transactions_menu(customer)
             case "7":
                 customer.logout()
                 print("Logged out successfully")
@@ -1197,4 +1200,6 @@ def mask_card_id(card_id):
     return "*" * (len(card_id) - 4) + card_id[-4:]
 
 
-main_menu()
+if __name__ == "__main__":
+
+    main_menu()
