@@ -7,13 +7,13 @@ import re
 lines_list = []
 trains_list = []
 
-def get_valid_time():
+def get_valid_time(prompt="Enter departure time (HH:MM): "):
     while True:
-        departure_time = input("Enter departure time (HH:MM): ")
-
+        departure_time = input(prompt).strip()
+        if departure_time.lower() == "exit":
+            return "exit"
         if re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", departure_time):
             return departure_time
-
         print("Invalid time format. Please enter time as HH:MM (example: 08:30)")
 
 def get_valid_number(prompt):
@@ -922,6 +922,8 @@ def get_all_trains_info(trains_list):
             "quality": train.quality,
             "price": train.price,
             "capacity": train.capacity,
+            "booked_seats": train.booked_seats,
+            "available_seats": train.capacity - train.booked_seats,
             "departure_time": train.departure_time,
             "distance": train.distance,
         }
