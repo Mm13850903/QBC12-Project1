@@ -3,16 +3,20 @@ from line import Line
 from train import Train
 import re
 
+
 def print_header(title):
     print("\n" + f" {title} ".center(40, "="))
     print()
 
+
 def print_separator():
     print("=" * 40 + "\n")
 
-#employees_list = []
+
+# employees_list = []
 lines_list = []
 trains_list = []
+
 
 def get_valid_time(prompt="Enter departure time (HH:MM): "):
     while True:
@@ -22,6 +26,7 @@ def get_valid_time(prompt="Enter departure time (HH:MM): "):
         if re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", departure_time):
             return departure_time
         print("Invalid time format. Please enter time as HH:MM (example: 08:30)")
+
 
 def get_valid_number(prompt):
     while True:
@@ -36,6 +41,7 @@ def get_valid_number(prompt):
         except ValueError:
             print("Please enter only numbers!")
 
+
 def login_employee(employees_list: list[Employee]):
     print("--- Employee Login ---")
     counter = 0
@@ -47,7 +53,7 @@ def login_employee(employees_list: list[Employee]):
         found_emp = None
 
         for emp in employees_list:
-            if emp.username == username and emp.password == password :
+            if emp.username == username and emp.password == password:
                 found_emp = emp
                 break
         if found_emp:
@@ -61,6 +67,7 @@ def login_employee(employees_list: list[Employee]):
             else:
                 print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
                 return None
+
 
 def add_line(lines_list):
     print_header("Add New Line (Type 'exit' to cancel)")
@@ -90,11 +97,12 @@ def add_line(lines_list):
         destination = input("Enter Destination: ").strip()
         if destination.lower() == "exit": return
 
-        while  destination.lower() == source.lower():
+        while destination.lower() == source.lower():
+
+            if destination.lower() == "exit":
+                return
             print("Error: Destination cannot be the same as Source.")
-            print("Please enter a different destination")
-            if destination.lower() == "exit": return
-        
+            destination = input("Please enter a different destination: ")
 
         station_count = get_valid_number("Enter number of stations: ")
         if station_count == "exit":
@@ -125,6 +133,7 @@ def add_line(lines_list):
     print("Error: Your account has been temporarily blocked due to 3 failed attempts")
     print("Returning to previous menu")
     return
+
 
 def edit_line(lines_list):
     print_header("Edit Line (Type 'exit' to cancel)")
@@ -301,6 +310,7 @@ def edit_line(lines_list):
         case _:
             print("Invalid choice! Returning to menu.")
 
+
 def delete_line(lines_list):
     print_header("Delete Line (Type 'exit' to cancel)")
 
@@ -342,6 +352,7 @@ def delete_line(lines_list):
         print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
         print("Returning to menu.")
         return
+
 
 def add_train(trains_list, lines_list):
     print_header("Add New Train (Type 'exit' to cancel)")
@@ -490,6 +501,7 @@ def add_train(trains_list, lines_list):
     else:
         trains_list.append(new_train)
         print(f"Success: Train '{name}' added successfully!")
+
 
 def edit_train(trains_list, lines_list):
     print_header("Edit Train (Type 'exit' to cancel)")
@@ -838,6 +850,7 @@ def edit_train(trains_list, lines_list):
             case _:
                 print("Invalid choice. Please enter a number between 1 and 11.")
 
+
 def delete_train(trains_list):
     print_header("Delete Train (Type 'exit' to cancel)")
 
@@ -875,6 +888,7 @@ def delete_train(trains_list):
         print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
         print("Returning to previous menu.")
         return
+
 
 def display_employee_panel(current_employee):
     while True:
@@ -944,6 +958,7 @@ def display_employee_panel(current_employee):
             case _:
                 print("Invalid choice. Please enter a number between 1 and 9.")
                 input("Press Enter to continue...")
+
 
 def get_all_trains_info(trains_list):
     trains_data = []
