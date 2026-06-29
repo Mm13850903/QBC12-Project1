@@ -31,5 +31,3 @@ class Line:
     def get_stations(self):
         return self.__stations
 
-
-

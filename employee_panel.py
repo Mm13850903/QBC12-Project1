@@ -3,6 +3,13 @@ from line import Line
 from train import Train
 import re
 
+def print_header(title):
+    print("\n" + f" {title} ".center(40, "="))
+    print()
+
+def print_separator():
+    print("=" * 40 + "\n")
+
 #employees_list = []
 lines_list = []
 trains_list = []
@@ -56,7 +63,7 @@ def login_employee(employees_list: list[Employee]):
                 return None
 
 def add_line(lines_list):
-    print("--- Add New Line (Type 'exit' to cancel) ---")
+    print_header("Add New Line (Type 'exit' to cancel)")
     count = 0
     while count < 3:
         name = input("Enter Line Name: ").strip()
@@ -114,7 +121,7 @@ def add_line(lines_list):
     return
 
 def edit_line(lines_list):
-    print("--- Edit Line (Type 'exit' to cancel) ---")
+    print_header("Edit Line (Type 'exit' to cancel)")
 
     if not lines_list:
         print("There are no lines to edit.")
@@ -289,7 +296,7 @@ def edit_line(lines_list):
             print("Invalid choice! Returning to menu.")
 
 def delete_line(lines_list):
-    print("--- Delete Line (Type 'exit' to cancel) ---")
+    print_header("Delete Line (Type 'exit' to cancel)")
 
     if not lines_list:
         print("There are no lines to delete.")
@@ -331,7 +338,7 @@ def delete_line(lines_list):
         return
 
 def add_train(trains_list, lines_list):
-    print("--- Add New Train (Type 'exit' to cancel) ---")
+    print_header("Add New Train (Type 'exit' to cancel)")
 
     count = 0
     while count < 3:
@@ -371,7 +378,7 @@ def add_train(trains_list, lines_list):
 
     print("Available Lines:")
     for i, line in enumerate(lines_list, 1):
-        print(f"{i}. {line.line_name}")
+        print(f"{i}. {line.name}")
 
     count = 0
     while count < 3:
@@ -447,8 +454,24 @@ def add_train(trains_list, lines_list):
     distance = get_valid_number("Enter Distance to Station: ")
     if distance == "exit": return
 
-    new_train = Train(train_id, name, selected_line.line_name, speed, stop_time, quality, price, capacity,
-                      departure_time, distance)
+    try:
+        new_train = Train(
+            train_id,
+            name,
+            selected_line.name,
+            speed,
+            stop_time,
+            quality,
+            price,
+            capacity,
+            departure_time,
+            distance
+        )
+
+    except ValueError as error:
+        print(error)
+        print("Train creation failed. Returning to previous menu.")
+        return
 
     collision_found = False
     for train in trains_list:
@@ -463,7 +486,7 @@ def add_train(trains_list, lines_list):
         print(f"Success: Train '{name}' added successfully!")
 
 def edit_train(trains_list, lines_list):
-    print("--- Edit Train (Type 'exit' to cancel) ---")
+    print_header("Edit Train (Type 'exit' to cancel)")
 
     if not trains_list:
         print("The train list is empty.")
@@ -636,9 +659,16 @@ def edit_train(trains_list, lines_list):
                         print(f"{remaining} attempts left.")
                         print("Please try again.")
                     else:
-                        selected_train.speed = new_speed
-                        print("Speed Updated successfully!")
-                        break
+                        try:
+                            selected_train.speed = new_speed
+                            print("Speed Updated successfully!")
+                            break
+                        except ValueError as error:
+                            count += 1
+                            remaining = 3 - count
+                            print(error)
+                            print(f"{remaining} attempts left.")
+                            print("Please try again.")
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
                     return
@@ -803,7 +833,7 @@ def edit_train(trains_list, lines_list):
                 print("Invalid choice. Please enter a number between 1 and 11.")
 
 def delete_train(trains_list):
-    print("--- Delete Train (Type 'exit' to cancel) ---")
+    print_header("Delete Train (Type 'exit' to cancel)")
 
     if not trains_list:
         print("The train list is empty. Nothing to delete.")
@@ -842,7 +872,7 @@ def delete_train(trains_list):
 
 def display_employee_panel(current_employee):
     while True:
-
+        print("\n" + "=" * 18 + "EMPLOYEE PANEL" + "=" * 18)
         print("1.Add line")
         print("2.Update one line information")
         print("3.Delete line")
@@ -857,60 +887,51 @@ def display_employee_panel(current_employee):
 
         match choice:
             case "1":
-                print("="*24)
                 add_line(lines_list)
 
             case "2":
-                print("=" * 24)
                 edit_line(lines_list)
 
             case "3":
-                print("=" * 24)
                 delete_line(lines_list)
 
             case "4":
-                print("=" * 24)
-                print("--- Information Lines ---")
+                print_header("Information Lines")
 
                 if not lines_list:
                     print("No lines have been registered yet!")
                 else:
-                    print("--- Registered Railway Lines ---")
                     for line in lines_list:
                         line.show_information()
 
+                print_separator()
                 input("Press Enter to return to menu...")
 
             case "5":
-                print("=" * 24)
                 if not lines_list:
                     print("No lines available! Please add a line first.")
                 else:
                     add_train(trains_list, lines_list)
 
             case "6":
-                print("=" * 24)
                 edit_train(trains_list, lines_list)
 
             case "7":
-                print("=" * 24)
                 delete_train(trains_list)
 
             case "8":
-                print("=" * 24)
-                print("--- Information Trains ---")
+                print_header("Information Trains")
 
                 if not trains_list:
                     print("No trains have been registered yet!")
                 else:
-                    print("--- Registered Trains ---")
                     for train in trains_list:
                         train.show_information()
 
+                print_separator()
                 input("Press Enter to return to menu...")
 
             case "9":
-                print("=" * 24)
                 print("Exiting Employee Panel. Returning to the start menu...")
                 break
 

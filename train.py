@@ -8,130 +8,117 @@ class Train:
         self.quality = quality
         self.price = price
         self.capacity = capacity
+        self.booked_seats = 0
         self.departure_time = departure_time
         self.distance = distance
 
     @staticmethod
     def time_to_minutes(time_str):
-        if not isinstance(time_str, str):
-            raise ValueError("Invalid time format: Input must be a string.")
-
-        parts = time_str.split(":")
-
-        if len(parts) != 2:
-            raise ValueError("Invalid time format: Expected 'HH:MM'.")
-
-        h = parts[0].strip()
-        m = parts[1].strip()
-
-        if not (h.isdigit() and m.isdigit()):
-            raise ValueError("Invalid time format: Hours and minutes must be numbers.")
-
-        hours = int(h)
-        minutes = int(m)
-
-        if not (0 <= hours < 24 and 0 <= minutes < 60):
-            raise ValueError("Invalid time format: Time out of logical bounds.")
-
+        hours, minutes = map(int, time_str.split(":"))
         return hours * 60 + minutes
 
     @staticmethod
     def validate_non_negative(value, field_name):
         if value < 0:
             raise ValueError(f"{field_name} cannot be negative.")
+        return True
 
     @property
     def train_id(self):
-        return self._train_id
+        return self.__train_id
 
     @train_id.setter
     def train_id(self, value):
         if not value:
-            raise ValueError("Train ID cannot be empty.")
-        self._train_id = value
+            print("Train ID cannot be empty.")
+            return
+        self.__train_id = value
 
     @property
     def name(self):
-        return self._name
+        return self.__name
 
     @name.setter
     def name(self, value):
         if not value.strip():
-            raise ValueError("Train name cannot be empty.")
-        self._name = value
+            print("Train name cannot be empty.")
+            return
+        self.__name = value
 
     @property
     def line_name(self):
-        return self._line_name
+        return self.__line_name
 
     @line_name.setter
     def line_name(self, value):
         if not value.strip():
-            raise ValueError("Line name cannot be empty.")
-        self._line_name = value
+            print("Line name cannot be empty.")
+            return
+        self.__line_name = value
 
     @property
     def speed(self):
-        return self._speed
+        return self.__speed
 
     @speed.setter
     def speed(self, value):
         self.validate_non_negative(value, "Speed")
-        self._speed = value
+        self.__speed = value
 
     @property
     def stop_time(self):
-        return self._stop_time
+        return self.__stop_time
 
     @stop_time.setter
     def stop_time(self, value):
         self.validate_non_negative(value, "Stop time")
-        self._stop_time = value
+        self.__stop_time = value
 
     @property
     def quality(self):
-        return self._quality
+        return self.__quality
 
     @quality.setter
     def quality(self, value):
-        value = int(value)
-        self.validate_non_negative(value, "Quality")
-        self._quality = value
+        val = int(value)
+        if not self.validate_non_negative(val, "Quality"):
+            return
+        self.__quality = val
 
     @property
     def price(self):
-        return self._price
+        return self.__price
 
     @price.setter
     def price(self, value):
         self.validate_non_negative(value, "Price")
-        self._price = value
+        self.__price = value
 
     @property
     def capacity(self):
-        return self._capacity
+        return self.__capacity
 
     @capacity.setter
     def capacity(self, value):
         self.validate_non_negative(value, "Capacity")
-        self._capacity = value
+        self.__capacity = value
 
     @property
     def departure_time(self):
-        return self._departure_time
+        return self.__departure_time
 
     @departure_time.setter
     def departure_time(self, value):
-        self._departure_time = value
+        self.__departure_time = value
 
     @property
     def distance(self):
-        return self._distance
+        return self.__distance
 
     @distance.setter
     def distance(self, value):
         self.validate_non_negative(value, "Distance")
-        self._distance = value
+        self.__distance = value
 
     def show_information(self):
         print(f"ID: {self.train_id}")
@@ -142,6 +129,8 @@ class Train:
         print(f"Quality: {self.quality}")
         print(f"Price: {self.price}")
         print(f"Capacity: {self.capacity}")
+        print(f"Booked Seats: {self.booked_seats}")
+        print(f"Available seats:{self.capacity - self.booked_seats}")
         print(f"Departure Time: {self.departure_time}")
         print(f"Distance: {self.distance}")
 
@@ -164,13 +153,15 @@ class Train:
         return not (self_departure <= other_arrival or self_arrival >= other_departure)
 
     def __str__(self):
-        return f"Train ID: {self.train_id}, Name: {self.name}, Line: {self.line_name}, Speed: {self.speed}, Stop Time: {self.stop_time}, Quality: {self.quality}, Price: {self.price}, Capacity: {self.capacity}, Departure Time: {self.departure_time}, Distance: {self.distance}"
+        return (f"Train ID: {self.train_id}, Name: {self.name}, Line: {self.line_name}, "
+                f"Speed: {self.speed}, Stop Time: {self.stop_time}, Quality: {self.quality}, "
+                f"Price: {self.price}, Capacity: {self.capacity}, Departure Time: {self.departure_time}, "
+                f"Distance: {self.distance}, Booked Seats: {self.booked_seats} available seats:{self.capacity - self.booked_seats}")
 
 
-
-
-
-t = Train(1, "dam", "sam", 22, 15, 5, 200, 55, "22:59", 120)
-
-t.speed = 25
-print(t.speed)
+    def get_a_passenger(self):
+        available_seats = self.capacity - self.booked_seats
+        if not available_seats > 0:
+            return False
+        self.booked_seats +=1
+        return True
