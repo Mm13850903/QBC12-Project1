@@ -1,4 +1,4 @@
-import employee
+from employee import is_valid_email, is_valid_password, check_email, Employee
 
 def Main_menu():
     while True:
@@ -50,8 +50,7 @@ def add_employee():
             continue
         
         password = input("Please enter a password for the new employee:\n")
-        first_name = input("Please enter employee's first name:\n")
-        last_name = input("Please enter employee's last name:\n")
+        name = input("Please enter employee's name:\n")
         email = input("Please enter employee's Email:\n")
         
         is_valid = employee_validation(password, email, employee_list)
@@ -59,9 +58,9 @@ def add_employee():
             print("Your information isn't valid! Try again.\n")
             continue
         
-        new_employee = Employee(username, password, first_name, last_name, email)
+        new_employee = Employee(username, password, name, email)
         employee_list[username] = new_employee
-        print(f"{first_name} {last_name} is now a Quera railway employee\n")
+        print(f"{name} is now a Quera railway employee\n")
         
         return
 
@@ -94,7 +93,7 @@ def repr_employee():
         else:
             print("List of Employees:\n")
             for employee in employee_list.values():
-                print(f"username:{employee.username} , Name:{employee.first_name} {employee.last_name} , Email:{employee.email}\n")
+                print(f"username:{employee.username} , Name:{employee.name} , Email:{employee.email}\n")
                 
             print("Returning to admin panel...\n")
             
