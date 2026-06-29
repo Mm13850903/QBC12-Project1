@@ -13,7 +13,7 @@ def Main_menu():
         if choice == "1":
             Admin_login()
         elif choice == "2":
-            login_employee(employee_list)
+            login_employee(list(employee_list.values()))
         elif choice == "3":
             main_menu()
         elif choice == "4":
