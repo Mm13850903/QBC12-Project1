@@ -1,4 +1,4 @@
-from classes import Employee, is_valid_email, is_valid_password, check_email
+import employee
 
 def Main_menu():
     while True:
