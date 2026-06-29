@@ -20,8 +20,7 @@ class Train:
     @staticmethod
     def validate_non_negative(value, field_name):
         if value < 0:
-            print(f"{field_name} cannot be negative.")
-            return False
+            raise ValueError(f"{field_name} cannot be negative.")
         return True
 
     @property
@@ -63,8 +62,7 @@ class Train:
 
     @speed.setter
     def speed(self, value):
-        if not self.validate_non_negative(value, "Speed"):
-            return
+        self.validate_non_negative(value, "Speed")
         self.__speed = value
 
     @property
@@ -73,8 +71,7 @@ class Train:
 
     @stop_time.setter
     def stop_time(self, value):
-        if not self.validate_non_negative(value, "Stop time"):
-            return
+        self.validate_non_negative(value, "Stop time")
         self.__stop_time = value
 
     @property
@@ -94,8 +91,7 @@ class Train:
 
     @price.setter
     def price(self, value):
-        if not self.validate_non_negative(value, "Price"):
-            return
+        self.validate_non_negative(value, "Price")
         self.__price = value
 
     @property
@@ -104,8 +100,7 @@ class Train:
 
     @capacity.setter
     def capacity(self, value):
-        if not self.validate_non_negative(value, "Capacity"):
-            return
+        self.validate_non_negative(value, "Capacity")
         self.__capacity = value
 
     @property
@@ -122,8 +117,7 @@ class Train:
 
     @distance.setter
     def distance(self, value):
-        if not self.validate_non_negative(value, "Distance"):
-            return
+        self.validate_non_negative(value, "Distance")
         self.__distance = value
 
     def show_information(self):
