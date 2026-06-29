@@ -436,8 +436,22 @@ def add_train(trains_list, lines_list):
         print("Returning to previous menu.")
         return
 
-    speed = get_valid_number("Enter Speed: ")
-    if speed == "exit": return
+    count = 0
+    while count < 3:
+        speed = get_valid_number("Enter Speed: ")
+        if speed == "exit": return
+        if float(speed) <= 0:
+            count += 1
+            remaining = 3 - count
+            print("Error: Speed must be greater than zero.")
+            print(f"{remaining} attempts left.")
+            print("Please try again.")
+        else:
+            break
+    else:
+        print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
+        print("Returning to previous menu.")
+        return
 
     stop_time = get_valid_number("Enter Stop Time: ")
     if stop_time == "exit": return
@@ -462,8 +476,22 @@ def add_train(trains_list, lines_list):
     price = get_valid_number("Enter Price: ")
     if price == "exit": return
 
-    capacity = get_valid_number("Enter Capacity: ")
-    if capacity == "exit": return
+    count = 0
+    while count < 3:
+        capacity = get_valid_number("Enter Capacity: ")
+        if capacity == "exit": return
+        if int(capacity) <= 0:
+            count += 1
+            remaining = 3 - count
+            print("Error: Capacity must be greater than zero.")
+            print(f"{remaining} attempts left.")
+            print("Please try again.")
+        else:
+            break
+    else:
+        print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
+        print("Returning to previous menu.")
+        return
 
     departure_time = get_valid_time("Enter Departure Time: ")
     if departure_time == "exit": return
