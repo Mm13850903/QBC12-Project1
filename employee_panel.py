@@ -857,15 +857,19 @@ def display_employee_panel(current_employee):
 
         match choice:
             case "1":
+                print("="*24)
                 add_line(lines_list)
 
             case "2":
+                print("=" * 24)
                 edit_line(lines_list)
 
             case "3":
+                print("=" * 24)
                 delete_line(lines_list)
 
             case "4":
+                print("=" * 24)
                 print("--- Information Lines ---")
 
                 if not lines_list:
@@ -878,18 +882,22 @@ def display_employee_panel(current_employee):
                 input("Press Enter to return to menu...")
 
             case "5":
+                print("=" * 24)
                 if not lines_list:
                     print("No lines available! Please add a line first.")
                 else:
                     add_train(trains_list, lines_list)
 
             case "6":
+                print("=" * 24)
                 edit_train(trains_list, lines_list)
 
             case "7":
+                print("=" * 24)
                 delete_train(trains_list)
 
             case "8":
+                print("=" * 24)
                 print("--- Information Trains ---")
 
                 if not trains_list:
@@ -902,6 +910,7 @@ def display_employee_panel(current_employee):
                 input("Press Enter to return to menu...")
 
             case "9":
+                print("=" * 24)
                 print("Exiting Employee Panel. Returning to the start menu...")
                 break
 
