@@ -43,19 +43,22 @@ def get_valid_number(prompt):
 
 
 def login_employee(employees_list: list[Employee]):
-    print("--- Employee Login ---")
+    print("--- Employee Login (Enter 0 to go back) ---")
     counter = 0
-
     while counter < 3:
-        username = input("Username: ")
+        username = input("Username (or 0 to go back): ")
+        if username == "0":
+            print("Returning to previous menu...")
+            return None
+
         password = input("Password: ")
 
         found_emp = None
-
         for emp in employees_list:
             if emp.username == username and emp.password == password:
                 found_emp = emp
                 break
+
         if found_emp:
             print(f"Welcome {found_emp.name}")
             return found_emp
