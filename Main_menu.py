@@ -1,5 +1,6 @@
 from employee import is_valid_email, is_valid_password, check_email, Employee
-
+from employee_panel import login_employee, display_employee_panel
+from customer import main_menu
 def Main_menu():
     while True:
         print("Welcome to Quera railway")
@@ -12,9 +13,9 @@ def Main_menu():
         if choice == "1":
             Admin_login()
         elif choice == "2":
-            pass
+            login_employee(employee_list)
         elif choice == "3":
-            pass
+            main_menu()
         elif choice == "4":
             print("Goodbye!")
             break
