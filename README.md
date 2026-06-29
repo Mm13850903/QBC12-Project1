@@ -6,4 +6,4 @@ Fatemeh Mehnati , Sam Ahmadi , Ali Soltaninezhad , Erfan Naghdi , Mahyar Malek
 
 
 
-Admin user-pass: username = Username , password = NotPaidEnough
+Admin user-pass: username = YESIMFUNNY , password = NotPaidEnough
