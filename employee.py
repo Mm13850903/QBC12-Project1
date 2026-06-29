@@ -7,9 +7,7 @@ class Employee:
         self.name = name
         self.email = email
 
-employees_list = [Employee("karmand1", "Kd@1", "reza", "sam@email.com")]
-lines_list = []
-trains_list = []
+
 
 def is_valid_password(password):
     pattern = r'^(?=.*[a-zA-Z])(?=.*\d)(?=.*[&@])[a-zA-Z0-9&@]+$'
