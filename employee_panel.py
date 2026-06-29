@@ -102,7 +102,6 @@ def add_line(lines_list):
             if destination.lower() == "exit":
                 return
             print("Error: Destination cannot be the same as Source.")
-            print("If your source and destination are the same, don't you feel like it's better to travel with Snap ?")
             destination = input("Please enter a different destination: ")
 
         station_count = get_valid_number("Enter number of stations: ")
@@ -795,21 +794,19 @@ def edit_train(trains_list, lines_list):
             case "8":
                 count = 0
                 while count < 3:
-                    new_capacity_str = input(f"Enter new capacity (current: {selected_train.capacity}): ").strip()
-                    if new_capacity_str.lower() == "exit": return
+                    new_capacity = get_valid_number(f"Enter new capacity (current: {selected_train.capacity}): ")
+                    if new_capacity == "exit": return
 
-                    try:
-                        if not new_capacity_str:
-                            raise ValueError
-                        selected_train.capacity = int(new_capacity_str)
-                        print("Capacity Updated successfully!")
-                        break
-                    except ValueError:
+                    if int(new_capacity) <= 0:
                         count += 1
                         remaining = 3 - count
-                        print("Error: Invalid capacity.")
+                        print("Error: Capacity must be greater than zero.")
                         print(f"{remaining} attempts left.")
                         print("Please try again.")
+                    else:
+                        selected_train.capacity = int(new_capacity)
+                        print("Capacity Updated successfully!")
+                        break
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
                     return
