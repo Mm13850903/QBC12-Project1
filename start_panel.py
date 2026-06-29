@@ -3,10 +3,11 @@ from classes import Employee, is_valid_email, is_valid_password, check_email
 def Main_menu():
     while True:
         print("Welcome to Quera railway")
-        print("1.Admin panel")
-        print("2.Train employee panel")
-        print("3.Customer panel")
-        print("4.Exit railway!\n")
+        print("===== Main Menu =====")
+        print("1. Admin panel")
+        print("2. Train employee panel")
+        print("3. Customer panel")
+        print("4. Exit railway!\n")
         choice = input("Please enter 1-4 to continue:\n")
         if choice == "1":
             Admin_login()
@@ -40,6 +41,7 @@ def employee_validation(password, email, employees_list):
 
 def add_employee():
     while True:
+        print("===== Recruit =====")
         username = input("Please enter a username for new employee, Or enter 0 to return to admin panel:\n")
         if username == "0":
             return
@@ -54,7 +56,7 @@ def add_employee():
         
         is_valid = employee_validation(password, email, employee_list)
         if is_valid == False:
-            print("Youre information isn't valid! Try again.\n")
+            print("Your information isn't valid! Try again.\n")
             continue
         
         new_employee = Employee(username, password, first_name, last_name, email)
@@ -65,9 +67,14 @@ def add_employee():
 
 def remove_employee():
     while True:
+        print("===== Downsizing =====")
+        if len(employee_list) == 0:
+            print("No one to fire :(\n")
+            return
         username = input("Please enter a username to remove the related employee, Or enter 0 to return to admin panel:\n")
         if username == "0":
             return
+        
         if username in employee_list:
             employee_list.pop(username)
             print("User removed successfuly\n")
@@ -80,20 +87,22 @@ def remove_employee():
 
 def repr_employee():
     while True:
+        print("==== Expendables =====")
         if len(employee_list) == 0:
-            print("No one is in Quera raiway crew\n")
+            print("No one is in Quera railway crew\n")
             return
         else:
-            print("List of Employees:")
+            print("List of Employees:\n")
             for employee in employee_list.values():
                 print(f"username:{employee.username} , Name:{employee.first_name} {employee.last_name} , Email:{employee.email}\n")
                 
-            print("Returning to admin panlel...\n")
+            print("Returning to admin panel...\n")
             
             return
 
 def Admin_panel():
     while True:
+        print("===== Admin Panel =====")
         print("1.Add an employee to railway system")
         print("2.Remove an employee from railway system")
         print("3.See all employees")
@@ -110,9 +119,10 @@ def Admin_panel():
                 return
 
 def Admin_login():
-    admin_essentials = ("Username", "Password")
+    admin_essentials = ("Username", "NotPaidEnough")
     count = 0
     while True:
+        print("===== Login =====")
         username = input("Please enter your username, Or enter 0 to exit to main menu:\n")
         if username == "0":
             break
