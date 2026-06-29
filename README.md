@@ -103,3 +103,10 @@ This project uses in-memory data structures and does not require a database.
 All interactions are performed through the terminal.
 
 Data is stored only during program execution.
+
+___________________________________________
+
+Admin:
+
+Username: YESIMFUNNY
+Password: NotPaidEnough
