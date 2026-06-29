@@ -97,16 +97,18 @@ def add_line(lines_list):
         destination = input("Enter Destination: ").strip()
         if destination.lower() == "exit": return
 
+        count_dest = 0
         while destination.lower() == source.lower():
-
-            if destination.lower() == "exit":
+            count_dest += 1
+            remaining = 3 - count_dest
+            if count_dest < 3:
+                print("Error: Source and destination are the same! Just grab a taxi for that route. Enter a different destination.")
+                print(f"{remaining} attempts left.")
+                destination = input("Enter Destination: ").strip()
+                if destination.lower() == "exit": return
+            else:
+                print("Error: You entered the same source and destination 3 times! Seriously, take a taxi. Returning to menu.")
                 return
-            print("Error: Destination cannot be the same as Source.")
-            destination = input("Please enter a different destination: ")
-
-        station_count = get_valid_number("Enter number of stations: ")
-        if station_count == "exit":
-            return
 
         station_count = int(station_count)
         stations_names = []
@@ -232,6 +234,12 @@ def edit_line(lines_list):
                     print("Error: Source cannot be empty.")
                     print(f"{remaining} attempts left.")
                     print("Please try again.")
+                elif new_source.lower() == selected_line.destination.lower():
+                    count += 1
+                    remaining = 3 - count
+                    print("Error: Source can't be the same as the destination! Just take a taxi.")
+                    print(f"{remaining} attempts left.")
+                    print("Please try again.")
                 else:
                     selected_line.source = new_source
                     print("Source Updated successfully!")
@@ -250,6 +258,12 @@ def edit_line(lines_list):
                     count += 1
                     remaining = 3 - count
                     print("Error: Destination cannot be empty.")
+                    print(f"{remaining} attempts left.")
+                    print("Please try again.")
+                elif new_destination.lower() == selected_line.source.lower():
+                    count += 1
+                    remaining = 3 - count
+                    print("Error: Destination can't be the same as the source! Just take a taxi.")
                     print(f"{remaining} attempts left.")
                     print("Please try again.")
                 else:
@@ -483,7 +497,7 @@ def add_train(trains_list, lines_list):
         if int(capacity) <= 0:
             count += 1
             remaining = 3 - count
-            print("Error: Capacity must be greater than zero.")
+            print("Error: A train with zero seats? Are passengers supposed to bring their own pillows and blankets and sit on the floor? Enter a proper number.")
             print(f"{remaining} attempts left.")
             print("Please try again.")
         else:
@@ -800,7 +814,7 @@ def edit_train(trains_list, lines_list):
                     if int(new_capacity) <= 0:
                         count += 1
                         remaining = 3 - count
-                        print("Error: Capacity must be greater than zero.")
+                        print("Error: A train with zero seats? Are passengers supposed to bring their own pillows and blankets and sit on the floor? Enter a proper number.")
                         print(f"{remaining} attempts left.")
                         print("Please try again.")
                     else:
