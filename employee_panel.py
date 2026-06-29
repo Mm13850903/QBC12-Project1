@@ -3,20 +3,18 @@ from line import Line
 from train import Train
 import re
 
-# employees_list = []
+#employees_list = []
 lines_list = []
 trains_list = []
 
-
-def get_valid_time():
+def get_valid_time(prompt="Enter departure time (HH:MM): "):
     while True:
-        departure_time = input("Enter departure time (HH:MM): ")
-
+        departure_time = input(prompt).strip()
+        if departure_time.lower() == "exit":
+            return "exit"
         if re.fullmatch(r"([01]\d|2[0-3]):[0-5]\d", departure_time):
             return departure_time
-
         print("Invalid time format. Please enter time as HH:MM (example: 08:30)")
-
 
 def get_valid_number(prompt):
     while True:
@@ -31,7 +29,6 @@ def get_valid_number(prompt):
         except ValueError:
             print("Please enter only numbers!")
 
-
 def login_employee(employees_list: list[Employee]):
     print("--- Employee Login ---")
     counter = 0
@@ -43,7 +40,7 @@ def login_employee(employees_list: list[Employee]):
         found_emp = None
 
         for emp in employees_list:
-            if emp.username == username and emp.password == password:
+            if emp.username == username and emp.password == password :
                 found_emp = emp
                 break
         if found_emp:
@@ -57,7 +54,6 @@ def login_employee(employees_list: list[Employee]):
             else:
                 print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
                 return None
-
 
 def add_line(lines_list):
     print("--- Add New Line (Type 'exit' to cancel) ---")
@@ -74,8 +70,7 @@ def add_line(lines_list):
             print("Please try again")
             continue
 
-
-        if any(line.get_name().lower() == name.lower() for line in lines_list):
+        if any(line.name.lower() == name.lower() for line in lines_list):
             count += 1
             print(f"Error: Line '{name}' already exists")
             print(f"{3 - count} attempts left.")
@@ -158,7 +153,6 @@ def edit_line(lines_list):
         print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
         print("Returning to previous menu.")
         return
-
 
     print("\n1. Edit Name")
     print("2. Edit Source")
@@ -294,7 +288,6 @@ def edit_line(lines_list):
         case _:
             print("Invalid choice! Returning to menu.")
 
-
 def delete_line(lines_list):
     print("--- Delete Line (Type 'exit' to cancel) ---")
 
@@ -304,15 +297,15 @@ def delete_line(lines_list):
 
     count = 0
     while count < 3:
-        line_name = input("Enter Line Name: ").strip()
+        line_name = input("Enter line name to delete: ").strip()
         if line_name.lower() == "exit": return
 
         if not line_name:
-            count +=1
+            count += 1
             remaining = 3 - count
             print("Error: Line name cannot be empty.")
             print(f"{remaining} attempts left.")
-            print("please try again.")
+            print("Please try again.")
             continue
 
         selection_line = None
@@ -331,12 +324,11 @@ def delete_line(lines_list):
             remaining = 3 - count
             print(f"Error: Line '{line_name}' not found.")
             print(f"{remaining} attempts left.")
-            print("please try again.")
+            print("Please try again.")
     else:
         print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
         print("Returning to menu.")
         return
-
 
 def add_train(trains_list, lines_list):
     print("--- Add New Train (Type 'exit' to cancel) ---")
@@ -351,7 +343,7 @@ def add_train(trains_list, lines_list):
             remaining = 3 - count
             print("Error: Train ID cannot be empty.")
             print(f"{remaining} attempts left.")
-            print("please try again.")
+            print("Please try again.")
             continue
 
         is_duplicate = False
@@ -365,7 +357,7 @@ def add_train(trains_list, lines_list):
             remaining = 3 - count
             print("Error: This ID already exists!")
             print(f"{remaining} attempts left.")
-            print("please try again.")
+            print("Please try again.")
         else:
             break
     else:
@@ -386,14 +378,6 @@ def add_train(trains_list, lines_list):
         line_choice = get_valid_number("Select Line Number (by index): ")
         if line_choice == "exit": return
 
-        if line_choice is None:
-            count += 1
-            remaining = 3 - count
-            print("Error: Invalid input.")
-            print(f"{remaining} attempts left.")
-            print("please try again.")
-            continue
-
         try:
             idx = int(line_choice) - 1
             if idx < 0 or idx >= len(lines_list):
@@ -405,12 +389,11 @@ def add_train(trains_list, lines_list):
             remaining = 3 - count
             print("Error: Invalid line selection!")
             print(f"{remaining} attempts left.")
-            print("please try again.")
+            print("Please try again.")
     else:
         print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
         print("Returning to previous menu.")
         return
-
 
     count = 0
     while count < 3:
@@ -429,53 +412,22 @@ def add_train(trains_list, lines_list):
         print("Returning to previous menu.")
         return
 
+    speed = get_valid_number("Enter Speed: ")
+    if speed == "exit": return
 
-    count = 0
-    while count < 3:
-        speed = get_valid_number("Enter Speed: ")
-        if speed == "exit": return
-        if speed is None:
-            count += 1
-            remaining = 3 - count
-            print("Error: Invalid speed.")
-            print(f"{remaining} attempts left.")
-            print("please try again.")
-        else:
-            break
-    else:
-        print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
-        print("Returning to previous menu.")
-        return
-
-
-    count = 0
-    while count < 3:
-        stop_time = get_valid_number("Enter Stop Time: ")
-        if stop_time == "exit": return
-        if stop_time is None:
-            count += 1
-            remaining = 3 - count
-            print("Error: Invalid stop time.")
-            print(f"{remaining} attempts left.")
-            print("plase try again.")
-        else:
-            break
-    else:
-        print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
-        print("Returning to previous menu.")
-        return
-
+    stop_time = get_valid_number("Enter Stop Time: ")
+    if stop_time == "exit": return
 
     count = 0
     while count < 3:
         quality = get_valid_number("Enter Quality (1-5): ")
         if quality == "exit": return
-        if quality is None or int(quality) < 1 or int(quality) > 5:
+        if int(quality) < 1 or int(quality) > 5:
             count += 1
             remaining = 3 - count
             print("Error: Quality must be a number between 1 and 5.")
             print(f"{remaining} attempts left.")
-            print("please try again.")
+            print("Please try again.")
         else:
             break
     else:
@@ -483,75 +435,17 @@ def add_train(trains_list, lines_list):
         print("Returning to previous menu.")
         return
 
+    price = get_valid_number("Enter Price: ")
+    if price == "exit": return
 
-    count = 0
-    while count < 3:
-        price = get_valid_number("Enter Price: ")
-        if price == "exit": return
-        if price is None:
-            count += 1
-            remaining = 3 - count
-            print("Error: Invalid price.")
-            print(f"{remaining} attempts left.")
-            print("please try again.")
-        else:
-            break
-    else:
-        print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
-        print("Returning to previous menu.")
-        return
+    capacity = get_valid_number("Enter Capacity: ")
+    if capacity == "exit": return
 
-    count = 0
-    while count < 3:
-        capacity = get_valid_number("Enter Capacity: ")
-        if capacity == "exit": return
-        if capacity is None:
-            count += 1
-            remaining = 3 - count
-            print("Error: Invalid capacity.")
-            print(f"{remaining} attempts left.")
-            print("please try again.")
-        else:
-            break
-    else:
-        print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
-        print("Returning to previous menu.")
-        return
+    departure_time = get_valid_time("Enter Departure Time: ")
+    if departure_time == "exit": return
 
-
-    count = 0
-    while count < 3:
-        departure_time = get_valid_time("Enter Departure Time: ")
-        if departure_time == "exit": return
-        if not departure_time:
-            count += 1
-            remaining = 3 - count
-            print("Error: Invalid departure time.")
-            print(f"{remaining} attempts left.")
-            print("please try again.")
-        else:
-            break
-    else:
-        print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
-        print("Returning to previous menu.")
-        return
-
-    count = 0
-    while count < 3:
-        distance = get_valid_number("Enter Distance to Station: ")
-        if distance == "exit": return
-        if distance is None:
-            count += 1
-            remaining = 3 - count
-            print("Error: Invalid distance.")
-            print(f"{remaining} attempts left.")
-            print("please try again.")
-        else:
-            break
-    else:
-        print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
-        print("Returning to previous menu.")
-        return
+    distance = get_valid_number("Enter Distance to Station: ")
+    if distance == "exit": return
 
     new_train = Train(train_id, name, selected_line.line_name, speed, stop_time, quality, price, capacity,
                       departure_time, distance)
@@ -567,7 +461,6 @@ def add_train(trains_list, lines_list):
     else:
         trains_list.append(new_train)
         print(f"Success: Train '{name}' added successfully!")
-
 
 def edit_train(trains_list, lines_list):
     print("--- Edit Train (Type 'exit' to cancel) ---")
@@ -588,7 +481,7 @@ def edit_train(trains_list, lines_list):
             remaining = 3 - count
             print("Error: Train ID cannot be empty.")
             print(f"{remaining} attempts left.")
-            print(" Please try again.")
+            print("Please try again.")
             continue
 
         selected_train = next((t for t in trains_list if t.train_id == target_id), None)
@@ -654,11 +547,9 @@ def edit_train(trains_list, lines_list):
                         break
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "2":
-
                 count = 0
                 while count < 3:
                     new_name = input("Enter new name: ").strip()
@@ -669,7 +560,7 @@ def edit_train(trains_list, lines_list):
                         remaining = 3 - count
                         print("Error: Name cannot be empty.")
                         print(f"{remaining} attempts left.")
-                        print("please try again.")
+                        print("Please try again.")
                         continue
 
                     name_exists = False
@@ -683,14 +574,13 @@ def edit_train(trains_list, lines_list):
                         remaining = 3 - count
                         print(f"Error: '{new_name}' is already taken by another train.")
                         print(f"{remaining} attempts left.")
-                        print("please try again.")
+                        print("Please try again.")
                     else:
                         selected_train.name = new_name
                         print("Name Updated successfully!")
                         break
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "3":
@@ -712,7 +602,7 @@ def edit_train(trains_list, lines_list):
                         remaining = 3 - count
                         print("Error: Input cannot be empty.")
                         print(f"{remaining} attempts left.")
-                        print("please try again.")
+                        print("Please try again.")
                         continue
 
                     try:
@@ -728,10 +618,9 @@ def edit_train(trains_list, lines_list):
                         remaining = 3 - count
                         print("Error: Invalid line number.")
                         print(f"{remaining} attempts left.")
-                        print("please try again.")
+                        print("Please try again.")
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "4":
@@ -740,19 +629,18 @@ def edit_train(trains_list, lines_list):
                     new_speed = get_valid_number(f"Enter new speed (current: {selected_train.speed}): ")
                     if new_speed == "exit": return
 
-                    if new_speed is None or float(new_speed) <= 0:
+                    if float(new_speed) <= 0:
                         count += 1
                         remaining = 3 - count
                         print("Error: Speed must be greater than zero.")
                         print(f"{remaining} attempts left.")
-                        print("please try again.")
+                        print("Please try again.")
                     else:
                         selected_train.speed = new_speed
                         print("Speed Updated successfully!")
                         break
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "5":
@@ -771,15 +659,14 @@ def edit_train(trains_list, lines_list):
                         selected_train.stop_time = val
                         print("Stop Time Updated successfully!")
                         break
-                    except ValueError as e:
+                    except ValueError:
                         count += 1
                         remaining = 3 - count
                         print("Error: Invalid stop time.")
                         print(f"{remaining} attempts left.")
-                        print("please try again.")
+                        print("Please try again.")
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "6":
@@ -804,7 +691,6 @@ def edit_train(trains_list, lines_list):
                         print("Please try again.")
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "7":
@@ -824,10 +710,9 @@ def edit_train(trains_list, lines_list):
                         remaining = 3 - count
                         print("Error: Invalid price.")
                         print(f"{remaining} attempts left.")
-                        print("please try again.")
+                        print("Please try again.")
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "8":
@@ -847,25 +732,16 @@ def edit_train(trains_list, lines_list):
                         remaining = 3 - count
                         print("Error: Invalid capacity.")
                         print(f"{remaining} attempts left.")
-                        print("Please try again")
+                        print("Please try again.")
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "9":
                 count = 0
                 while count < 3:
-                    new_departure_time = get_valid_time(f"Enter new departure time (current: {selected_train.departure_time}): ")
+                    new_departure_time = get_valid_time("Enter new departure time: ")
                     if new_departure_time == "exit": return
-
-                    if not new_departure_time:
-                        count += 1
-                        remaining = 3 - count
-                        print("Error: Invalid time format.")
-                        print(f"{remaining} attempts left.")
-                        print("Please try again")
-                        continue
 
                     old_departure_time = selected_train.departure_time
                     selected_train.departure_time = new_departure_time
@@ -882,28 +758,19 @@ def edit_train(trains_list, lines_list):
                         remaining = 3 - count
                         print("Error: This time causes a collision with another train!")
                         print(f"{remaining} attempts left.")
-                        print("please try again.")
+                        print("Please try again.")
                     else:
                         print("Departure time updated successfully!")
                         break
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "10":
                 count = 0
                 while count < 3:
-                    new_distance = get_valid_number(f"Enter new distance (current: {selected_train.distance}): ")
+                    new_distance = get_valid_number("Enter new distance: ")
                     if new_distance == "exit": return
-
-                    if new_distance is None:
-                        count += 1
-                        remaining = 3 - count
-                        print("Error: Invalid distance.")
-                        print(f"{remaining} attempts left.")
-                        print("Please try again.")
-                        continue
 
                     old_distance = selected_train.distance
                     selected_train.distance = new_distance
@@ -920,22 +787,20 @@ def edit_train(trains_list, lines_list):
                         remaining = 3 - count
                         print("Error: This distance causes a collision with another train!")
                         print(f"{remaining} attempts left.")
-                        print("please try again.")
+                        print("Please try again.")
                     else:
                         print("Distance updated successfully!")
                         break
                 else:
                     print("Error: Account temporarily blocked. Returning to menu.")
-                    print("Returning to previous menu.")
                     return
 
             case "11":
                 print("Returning to previous menu...")
-                return
+                break
 
             case _:
                 print("Invalid choice. Please enter a number between 1 and 11.")
-
 
 def delete_train(trains_list):
     print("--- Delete Train (Type 'exit' to cancel) ---")
@@ -950,7 +815,6 @@ def delete_train(trains_list):
 
         if target_id.lower() == "exit": return
 
-
         if not target_id:
             count += 1
             remaining = 3 - count
@@ -961,20 +825,16 @@ def delete_train(trains_list):
 
         selected_train = next((t for t in trains_list if t.train_id == target_id), None)
 
-
         if selected_train:
             trains_list.remove(selected_train)
             print(f"Success: Train with ID '{target_id}' has been deleted successfully.")
             break
-
-
         else:
             count += 1
             remaining = 3 - count
             print(f"Error: No train found with ID '{target_id}'.")
             print(f"{remaining} attempts left.")
             print("Please try again.")
-
     else:
         print("Error: Your account has been temporarily blocked due to 3 failed attempts.")
         print("Returning to previous menu.")
@@ -1027,7 +887,7 @@ def display_employee_panel(current_employee):
                 edit_train(trains_list, lines_list)
 
             case "7":
-                delete_train(trains_list, lines_list)
+                delete_train(trains_list)
 
             case "8":
                 print("--- Information Trains ---")
@@ -1048,3 +908,25 @@ def display_employee_panel(current_employee):
             case _:
                 print("Invalid choice. Please enter a number between 1 and 9.")
                 input("Press Enter to continue...")
+
+def get_all_trains_info(trains_list):
+    trains_data = []
+
+    for train in trains_list:
+        train_dict = {
+            "train_id": train.train_id,
+            "name": train.name,
+            "line_name": train.line_name,
+            "speed": train.speed,
+            "stop_time": train.stop_time,
+            "quality": train.quality,
+            "price": train.price,
+            "capacity": train.capacity,
+            "booked_seats": train.booked_seats,
+            "available_seats": train.capacity - train.booked_seats,
+            "departure_time": train.departure_time,
+            "distance": train.distance,
+        }
+        trains_data.append(train_dict)
+
+    return trains_data
