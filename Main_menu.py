@@ -13,7 +13,9 @@ def Main_menu():
         if choice == "1":
             Admin_login()
         elif choice == "2":
-            login_employee(list(employee_list.values()))
+            employee = login_employee(list(employee_list.values()))
+            if employee is not None:
+                display_employee_panel(employee)
         elif choice == "3":
             main_menu()
         elif choice == "4":
