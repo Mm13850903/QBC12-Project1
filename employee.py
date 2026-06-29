@@ -34,7 +34,7 @@ def check_username(username, target_list):
 
 
 def check_email(email, target_list):
-    for item in target_list:
+    for item in target_list.values():
         if item.email == email:
             return True
         return False
